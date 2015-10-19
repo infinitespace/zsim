@@ -44,6 +44,7 @@
 #include "constants.h"
 #include "contention_sim.h"
 #include "core.h"
+#include "core_name_map.h"
 #include "cpuenum.h"
 #include "cpuid.h"
 #include "debug_zsim.h"
@@ -1437,6 +1438,49 @@ static EXCEPT_HANDLING_RESULT InternalExceptionHandler(THREADID tid, EXCEPTION_I
 
 /* ===================================================================== */
 
+INT PIN_FAST_ANALYSIS_CALL ThreadSetAffinity(THREADID tid, const char* coreName, UINT32 coreIndex) {
+    uint32_t curCid = getCid(tid);
+    uint32_t newCid = getCidFromCoreName(coreName, coreIndex);
+    //info("ThreadSetAffinity: thread %u on core %u targets %s-%u (core %u)",
+            //tid, curCid, coreName, coreIndex, newCid);
+
+    // Update mask
+    vector<bool> mask(zinfo->numCores, false);
+    mask[newCid] = true;
+    zinfo->sched->updateMask(procIdx, tid, mask);
+
+    clearCid(tid);
+    zinfo->sched->leave(procIdx, tid, curCid);
+    uint32_t resCid = zinfo->sched->join(procIdx, tid);
+    setCid(tid, resCid);
+    fPtrs[tid] = cores[tid]->GetFuncPtrs();
+
+    if (resCid != newCid) {
+        return -1;
+    }
+    return 0;
+}
+
+
+void Image(IMG img, VOID *v) {
+    RTN rtnThreadSetAffinity = RTN_FindByName(img, "zsim_thread_setaffinity");
+    if (RTN_Valid(rtnThreadSetAffinity)) {
+        PROTO protoThreadSetAffinity = PROTO_Allocate(PIN_PARG(int), CALLINGSTD_DEFAULT,
+                "zsim_thread_setaffinity",
+                PIN_PARG(const char*),
+                PIN_PARG(uint32_t),
+                PIN_PARG_END());
+        RTN_ReplaceSignature(rtnThreadSetAffinity, AFUNPTR(ThreadSetAffinity),
+                IARG_PROTOTYPE, protoThreadSetAffinity,
+                IARG_THREAD_ID,
+                IARG_FUNCARG_ENTRYPOINT_VALUE, 0,
+                IARG_FUNCARG_ENTRYPOINT_VALUE, 1,
+                IARG_END);
+    }
+}
+
+/* ===================================================================== */
+
 int main(int argc, char *argv[]) {
     PIN_InitSymbols();
     if (PIN_Init(argc, argv)) return Usage();
@@ -1540,6 +1584,7 @@ int main(int argc, char *argv[]) {
 
     //Register instrumentation
     TRACE_AddInstrumentFunction(Trace, 0);
+    IMG_AddInstrumentFunction(Image, 0);
     VdsoInit(); //initialized vDSO patching information (e.g., where all the possible vDSO entry points are)
 
     PIN_AddThreadStartFunction(ThreadStart, 0);
