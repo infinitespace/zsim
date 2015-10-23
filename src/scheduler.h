@@ -372,6 +372,10 @@ class Scheduler : public GlobAlloc, public Callee {
                     schedule(inTh, ctx);
                     zinfo->cores[ctx->cid]->join(); //inTh does not do a sched->join, so we need to notify the core since we just called leave() on it
                     wakeup(inTh, false /*no join, we did not leave*/);
+                } else if (th->mask[th->cid] == false) {
+                    deschedule(th, ctx, BLOCKED);
+                    freeList.push_back(ctx);
+                    bar.leave(cid); //may trigger end of phase
                 } else { //lazily transition to OUT, where we retain our context
                     th->state = OUT;
                     outQueue.push_back(th);
@@ -550,6 +554,20 @@ class Scheduler : public GlobAlloc, public Callee {
         }
 
         uint32_t getScheduledPid(uint32_t cid) const { return (contexts[cid].state == USED)? getPid(contexts[cid].curThread->gid) : (uint32_t)-1; }
+
+        void updateMask(uint32_t pid, uint32_t tid, const g_vector<bool>& mask) {
+            futex_lock(&schedLock);
+            uint32_t gid = getGid(pid, tid);
+            if(gidMap.find(gid) == gidMap.end()) {
+                panic("Scheduler::updateMask(): can't find thread info pid=%d, tid=%d", pid, tid);
+            }
+            //info("Scheduler::updateMask(): update thread mask pid=%d, tid=%d", pid, tid);
+            ThreadInfo* th = gidMap[gid];
+            assert(mask.size() == zinfo->numCores);
+            th->mask = mask;
+            futex_unlock(&schedLock);
+            // Do leave and join outside to clear and set cid in zsim.cpp
+        }
 
     private:
         void schedule(ThreadInfo* th, ContextInfo* ctx) {

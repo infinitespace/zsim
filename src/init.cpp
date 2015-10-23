@@ -37,6 +37,7 @@
 #include "constants.h"
 #include "contention_sim.h"
 #include "core.h"
+#include "core_name_map.h"
 #include "detailed_mem.h"
 #include "detailed_mem_params.h"
 #include "ddr_mem.h"
@@ -645,6 +646,8 @@ static void InitSystem(Config& config) {
             } else {
                 panic("%s: Invalid core type %s", group, type.c_str());
             }
+
+            addCoreName(group, cores);
 
             if (type != "Null") {
                 string icache = config.get<const char*>(prefix + "icache");
