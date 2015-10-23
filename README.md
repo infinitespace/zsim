@@ -8,7 +8,7 @@ In order to simulate thread mapping in very large  heterogenous system.
 ```
 mkdir ~/cs316
 cd ~/cs316/
-wget https://github.com/infinitespace/zsim/blob/master/zsim_build.sh
+wget https://raw.githubusercontent.com/infinitespace/zsim/master/zsim_build.sh
 sh zsim_build.sh
 ```
 2. Make modifications in workspace
