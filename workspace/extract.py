@@ -54,15 +54,14 @@ I_leak_beefy=1.3136495
 I_leak_wimpy=0.45455
 CORE_DYN_ENERGY_B= 2.22/1000000000*instrs1*(CORE_VOLTAGE_B/1.35)*(CORE_VOLTAGE_B/1.35)
 CORE_STA_ENERGY_B= I_leak_beefy*CORE_VOLTAGE_B*TIME*cores_beefy
-#print 'beefy core dynamic energy (W):',CORE_DYN_ENERGY_B
-#print 'beefy core static energy (W):',CORE_STA_ENERGY_B
+print 'beefy core dynamic energy (W):',CORE_DYN_ENERGY_B
+print 'beefy core static energy (W):',CORE_STA_ENERGY_B
 CORE_DYN_ENERGY_W= .78/1000000000*instrs2*(CORE_VOLTAGE_W/1.16)*(CORE_VOLTAGE_W/1.16)
 CORE_STA_ENERGY_W= I_leak_wimpy*CORE_VOLTAGE_W*TIME*cores_wimpy
-#print 'wimpy core dynamic energy (W):',CORE_DYN_ENERGY_W
-#print 'wimpy core static energy (W):',CORE_STA_ENERGY_W
+print 'wimpy core dynamic energy (W):',CORE_DYN_ENERGY_W
+print 'wimpy core static energy (W):',CORE_STA_ENERGY_W
 print 'Core dynamic energy (J):', CORE_DYN_ENERGY_B + CORE_DYN_ENERGY_W
 print 'Core static energy (J):', CORE_STA_ENERGY_B + CORE_STA_ENERGY_W
-
 
 l1_hgets_b = np.sum(dset[-1]['l1i_beefy']['hGETS']) + np.sum(dset[-1]['l1d_beefy']['hGETS'])
 l1_hgetx_b = np.sum(dset[-1]['l1i_beefy']['hGETX']) + np.sum(dset[-1]['l1d_beefy']['hGETX'])
@@ -71,3 +70,5 @@ l1_miss_b = np.sum(dset[-1]['l1i_beefy']['mGETS']) + np.sum(dset[-1]['l1d_beefy'
 l2_hgets_b = np.sum(dset[-1]['l2_beefy']['hGETS'])
 l2_hgetx_b = np.sum(dset[-1]['l2_beefy']['hGETX'])
 l2_miss_b = np.sum(dset[-1]['l2_beefy']['mGETS'])
+
+print l1_hgets_b
