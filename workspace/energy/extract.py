@@ -1,29 +1,44 @@
 #!/usr/bin/python
 
 import h5py
+import pprint
 import numpy as np
+import parse_cfg as ps
 
-frequency = 2400.
-cores_beefy = 6
-cores_wimpy = 10
-phaseLength = 10000
-L1SIZE_beefy = 32
-L1WAYS_beefy = 4
-L1SIZE_wimpy = 8
-L1WAYS_wimpy = 4
-L2SIZE = 256
-L2WAYS = 8
-L3SIZE = 8192
-L3WAYS = 16
+CFG_PATH = '../config/het.cfg'
+ZSIMH5_PATH = '../run/zsim-ev.h5'
 
+cfg = ps.parse(CFG_PATH)
+
+pprint.pprint(cfg)
+
+frequency = float(cfg['sys']['frequency'])
+cores_beefy = int(cfg['sys']['cores']['beefy']['cores'])
+cores_wimpy = int(cfg['sys']['cores']['wimpy']['cores'])
+phaseLength = int(cfg['sim']['phaseLength'])
+L1DSIZE_beefy = int(cfg['sys']['caches']['l1d_beefy']['size'])/1024
+L1DWAYS_beefy = int(cfg['sys']['caches']['l1d_beefy']['array']['ways'])
+L1ISIZE_beefy = int(cfg['sys']['caches']['l1i_beefy']['size'])/1024
+L1IWAYS_beefy = int(cfg['sys']['caches']['l1i_beefy']['array']['ways'])
+L1DSIZE_wimpy = int(cfg['sys']['caches']['l1d_wimpy']['size'])/1024
+L1DWAYS_wimpy = int(cfg['sys']['caches']['l1d_wimpy']['array']['ways'])
+L1ISIZE_wimpy = int(cfg['sys']['caches']['l1i_wimpy']['size'])/1024
+L1IWAYS_wimpy = int(cfg['sys']['caches']['l1i_wimpy']['array']['ways'])
+L2SIZE = int(cfg['sys']['caches']['l2_beefy']['size'])/1024
+L2WAYS = int(cfg['sys']['caches']['l2_beefy']['array']['ways'])
+L3SIZE = int(cfg['sys']['caches']['l3']['size'])/1024
+L3WAYS = int(cfg['sys']['caches']['l3']['size'])
+MEM_TECH = cfg['sys']['mem']['tech']
+
+print frequency, cores_beefy, cores_wimpy, phaseLength, L1DSIZE_beefy, L1DWAYS_beefy, L2SIZE, L2WAYS, MEM_TECH 
 
 # Open stats file
-f = h5py.File('zsim-ev.h5', 'r')
+f = h5py.File(ZSIMH5_PATH, 'r')
 
 # Get the single dataset in the file
 dset = f["stats"]["root"]
-#print dset.shape
-#print dset.dtype
+print dset.shape
+print dset.dtype
 
 # Phase count at end of simulation
 endPhase = dset[-1]['phase']

@@ -25,21 +25,22 @@ def loadtoDict(lines, lennum):
             idx += 1
     d = {}
     cur = d
-    pre = d
+    stack = []
+    stack.append(d)
     while idx < lennum:
         if lines[idx][-1] == '{':
             key = lines[idx].split('=')[0].strip()
             val = {}
-            pre = cur
+            stack.append(cur)
             cur[key] = val
             cur = cur[key]
         elif lines[idx] == '};':
-            cur = pre
+            cur = stack.pop()
         else:
             key = lines[idx].split('=')[0].strip().strip('\";')
-            print lines[idx].split('=')
+            # print lines[idx].split('=')
             val = lines[idx].split('=')[1].strip().strip('\";')
             cur[key] = val
         idx += 1
-        print idx, d
+        # print idx, d
     return d
