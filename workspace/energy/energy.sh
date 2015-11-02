@@ -4,12 +4,7 @@ set -e
 
 debug() { echo "D> $*" 1>&2; }
 
-<<<<<<< HEAD
-MAIN_PATH=/afs/ir/users/s/i/sihua/cs316/zsim/zsim_build
-=======
-MAIN_PATH=~/cs316/zsim_build
-BIN_PATH=/downloads/zsim/workspace/energy/src
->>>>>>> d8bff743e07e36b051a5ebb0b3c4b18fee4d8d30
+MAIN_PATH=~/cs316/zsim_build/downloads/zsim/workspace/energy/src
 
 ## default
 CORES_b=6
@@ -29,10 +24,10 @@ MEMRANKS=2
 MEMTECH="DDR3-1066-CL8"
 
 ## Run CACTI 6.5 to get cache parameters
-L1_CACTI_beefy=`$MAIN_PATH$BIN_PATH/gen_cacti.sh -s $L1SIZEb -w $L1WAYSb`
-L1_CACTI_wimpy=`$MAIN_PATH$BIN_PATH/gen_cacti.sh -s $L1SIZEw -w $L1WAYSw`
-L2_CACTI=`$MAIN_PATH$BIN_PATH/gen_cacti.sh -s $L2SIZE -w $L2WAYS`
-L3_CACTI=`$MAIN_PATH$BIN_PATH/gen_cacti.sh -s $L3SIZE -w $L3WAYS`
+L1_CACTI_beefy=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZEb -w $L1WAYSb`
+L1_CACTI_wimpy=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZEw -w $L1WAYSw`
+L2_CACTI=`sh $MAIN_PATH/gen_cacti.sh -s $L2SIZE -w $L2WAYS`
+L3_CACTI=`sh $MAIN_PATH/gen_cacti.sh -s $L3SIZE -w $L3WAYS`
 # <size> <way> <type> <cycle time> <access time> <energy> <power> <area>
 echo $L1_CACTI_beefy > cacti_L1_beefy.txt
 echo $L1_CACTI_wimpy > cacti_L1_wimpy.txt

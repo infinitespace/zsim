@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CACTI=~/cs316/zsim_build/downloads/zsim/workspace/energy/cacti65/cacti
+CACTI=/afs/ir/class/ee282/pa1/cacti65/cacti
 
 set -e
 
