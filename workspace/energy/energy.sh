@@ -2,6 +2,8 @@
 
 set -e
 
+debug() { echo "D> $*" 1>&2; }
+
 MAIN_PATH=~/cs316/zsim_build/downloads/zsim/workspace/energy/src
 
 ## configuration parameters
@@ -21,18 +23,16 @@ DRAM_TECH=`cut -f13 -d " " args.txt`
 CORE_DYN_ENERGY=`cut -f14 -d " " args.txt`
 CORE_STA_ENERGY=`cut -f15 -d " " args.txt`
 
-CORES=`echo $CORES_b+$CORES_w | bc -l`
-
 ## Run CACTI 6.5 to get cache parameters
-L1_CACTI_beefy=`$MAIN_PATH/gen_cacti.sh -s $L1SIZEb -w $L1WAYSb`
-L1_CACTI_wimpy=`$MAIN_PATH/gen_cacti.sh -s $L1SIZEw -w $L1WAYSw`
-L2_CACTI=`$MAIN_PATH/gen_cacti.sh -s $L2SIZE -w $L2WAYS`
-L3_CACTI=`$MAIN_PATH/gen_cacti.sh -s $L3SIZE -w $L3WAYS`
+L1_CACTI_beefy=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZEb -w $L1WAYSb`
+L1_CACTI_wimpy=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZEw -w $L1WAYSw`
+L2_CACTI=`sh $MAIN_PATH/gen_cacti.sh -s $L2SIZE -w $L2WAYS`
+L3_CACTI=`sh $MAIN_PATH/gen_cacti.sh -s 12288 -w $L3WAYS`
 
-#echo $L1_CACTI_beefy > cacti_L1_beefy.txt
-#echo $L1_CACTI_wimpy > cacti_L1_wimpy.txt
-#echo $L2_CACTI > cacti_L2.txt
-#echo $L3_CACTI > cacti_L3.txt
+echo $L1_CACTI_beefy > cacti_L1_beefy.txt
+echo $L1_CACTI_wimpy > cacti_L1_wimpy.txt
+echo $L2_CACTI > cacti_L2.txt
+echo $L3_CACTI > cacti_L3.txt
 
 L1_ENERGY_b=`cut -f6 -d " " cacti_L1_beefy.txt`
 L1_POWER_b=`cut -f7 -d " " cacti_L1_beefy.txt`
@@ -45,13 +45,15 @@ L3_ENERGY=`cut -f6 -d " " cacti_L3.txt`
 L3_POWER=`cut -f7 -d " " cacti_L3.txt`
 L3_AREA=`cut -f8 -d " " cacti_L3.txt`
 
+CORES=`echo $CORES_b+$CORES_w | bc -l`
+
 # Beefy L1 cache energy
 L1_hGETS=`grep hGETS zsim.out | head -$[2*CORES_b] | awk '{sum += $2} END {print sum}'`
 L1_hGETX=`grep hGETX zsim.out | head -$[2*CORES_b] | awk '{sum += $2} END {print sum}'`
 L1_mGETS=`grep mGETS zsim.out | head -$[2*CORES_b] | awk '{sum += $2} END {print sum}'`
 
 L1_DYN_ENERGY=`echo "($L1_hGETS+$L1_hGETX+$L1_mGETS)*$L1_ENERGY_b/1000000000" | bc -l`
-L1_STA_ENERGY=`echo "$CORES_b*$L1_POWER/1000*$TIME" | bc -l`
+L1_STA_ENERGY=`echo "$CORES_b*$L1_POWER_b/1000*$TIME" | bc -l`
 
 tmp_L2_hGETS=`grep hGETS zsim.out | head -$[3*CORES_b] | awk '{sum += $2} END {print sum}'`
 L2_hGETS=$[tmp_L2_hGETS - L1_hGETS]
@@ -90,12 +92,12 @@ echo "L3 static energy (J)   : $L3_STA_ENERGY"
 echo "Mem dynamic energy (J) : $MEM_DYN_ENERGY"
 echo "Mem static energy (J)  : $MEM_STA_ENERGY"
 
-echo "$L1_ENERGY_b"
-echo "$L1_POWER_b"
-echo "$L2_ENERGY"
-echo "$L2_POWER"
-echo "$L2_AREA"
-echo "$L3_ENERGY"
-echo "$L3_POWER"
-echo "$L3_AREA"
+#echo "$L1_ENERGY_b"
+#echo "$L1_POWER_b"
+#echo "$L2_ENERGY"
+#echo "$L2_POWER"
+#echo "$L2_AREA"
+#echo "$L3_ENERGY"
+#echo "$L3_POWER"
+#echo "$L3_AREA"
 

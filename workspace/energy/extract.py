@@ -27,7 +27,7 @@ L1IWAYS_wimpy = int(cfg['sys']['caches']['l1i_wimpy']['array']['ways'])
 L2SIZE = int(cfg['sys']['caches']['l2_beefy']['size'])/1024
 L2WAYS = int(cfg['sys']['caches']['l2_beefy']['array']['ways'])
 L3SIZE = int(cfg['sys']['caches']['l3']['size'])/1024
-L3WAYS = int(cfg['sys']['caches']['l3']['size'])
+L3WAYS = int(cfg['sys']['caches']['l3']['array']['ways'])
 MEM_TECH = cfg['sys']['mem']['tech']
 
 #print frequency, cores_beefy, cores_wimpy, phaseLength, L1DSIZE_beefy, L1DWAYS_beefy, L2SIZE, L2WAYS, MEM_TECH 
