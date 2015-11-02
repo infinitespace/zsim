@@ -4,7 +4,7 @@ set -e
 
 debug() { echo "D> $*" 1>&2; }
 
-MAIN_PATH=/afs/ir/users/s/i/sihua/cs316/zsim_backup/zsim_build
+MAIN_PATH=/afs/ir/users/s/i/sihua/cs316/zsim/zsim_build
 
 ## default
 CORES_b=6
@@ -34,8 +34,10 @@ echo $L1_CACTI_wimpy > cacti_L1_wimpy.txt
 echo $L2_CACTI > cacti_L2.txt
 echo $L3_CACTI > cacti_L3.txt
 
-L1_ENERGY=`cut -f6 -d " " cacti_L1_beefy.txt`
-L1_POWER=`cut -f7 -d " " cacti_L1_beefy.txt`
+L1_ENERGY_b=`cut -f6 -d " " cacti_L1_beefy.txt`
+L1_POWER_b=`cut -f7 -d " " cacti_L1_beefy.txt`
+L1_ENERGY_w=`cut -f6 -d " " cacti_L1_wimpy.txt`
+L1_POWER_w=`cut -f7 -d " " cacti_L1_wimpy.txt`
 L2_ENERGY=`cut -f6 -d " " cacti_L2.txt`
 L2_POWER=`cut -f7 -d " " cacti_L2.txt`
 L2_AREA=`cut -f8 -d " " cacti_L2.txt`
@@ -44,7 +46,6 @@ L3_POWER=`cut -f7 -d " " cacti_L3.txt`
 L3_AREA=`cut -f8 -d " " cacti_L3.txt`
 
 #TIME=`python /afs/ir/users/s/i/sihua/cs316/zsim_backup/zsim_build/extract.py`
-
 
 L1_hGETS=`grep hGETS zsim.out | head -$[2*CORES_b] | awk '{sum += $2} END {print sum}'`
 L1_hGETX=`grep hGETX zsim.out | head -$[2*CORES_b] | awk '{sum += $2} END {print sum}'`
