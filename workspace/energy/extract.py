@@ -76,7 +76,7 @@ CORE_VOLTAGE_n = (frequency/1000) * .21967 + .66066
 instrs1 = np.sum(dset[-1]['big']['instrs']) 
 instrs2 = np.sum(dset[-1]['mid1']['instrs']) 
 instrs3 = np.sum(dset[-1]['mid2']['instrs']) 
-instrs4 = np.sum(dset[-1]['littl2']['instrs'])
+instrs4 = np.sum(dset[-1]['little']['instrs'])
 
 # Core Energy Model
 I_leak_w=1.3136495
@@ -89,7 +89,7 @@ CORE_DYN_ENERGY=CORE_DYN_ENERGY_w+CORE_DYN_ENERGY_n
 CORE_STA_ENERGY=CORE_STA_ENERGY_w+CORE_STA_ENERGY_n
 
 f = open('args.txt', 'w')
-f.write(str(TIME) + ' ' + str(frequency) + ' ' + str(cores_big) + ' ' + str(cores_mid1) + ' ' + str(cores_mid2) + ' ' + str(cores_little) + ' ' + str(L1ISIZE_big) + ' ' + str(L1IWAYS_big) + ' ' + str(L1ISIZE_mid1) + ' ' + str(L1IWAYS_mid1) + ' ' + str(L1ISIZE_mid2) + ' ' + str(L1IWAYS_mid2) + ' ' + str(L1ISIZE_little) + ' ' + str(L1IWAYS_little) + ' ' + str(L2SIZE_big) + ' ' + str(L2WAYS_big) + ' ' + str(L2SIZE_mid1) + ' ' + str(L2WAYS_mid1) + ' ' + str(L3SIZE) + ' ' + str(L3WAYS) + ' ' + str(MEM_TECH) + ' ' + str(CORE_DYN_ENERGY) + ' ' + str(CORE_STA_ENERGY) + ' ' + str(l1_1) + ' ' + str(l1_2) + ' ' + str(l1_3) + ' ' + str(l1_4) + ' ' + str(l2_1) + ' ' + str(l2_2) + ' ' + str(l3))
+f.write(str(TIME) + ' ' + str(frequency) + ' ' + str(cores_big) + ' ' + str(cores_mid1) + ' ' + str(cores_mid2) + ' ' + str(cores_little) + ' ' + str(L1SIZE_big) + ' ' + str(L1WAYS_big) + ' ' + str(L1SIZE_mid1) + ' ' + str(L1WAYS_mid1) + ' ' + str(L1SIZE_mid2) + ' ' + str(L1WAYS_mid2) + ' ' + str(L1SIZE_little) + ' ' + str(L1WAYS_little) + ' ' + str(L2SIZE_big) + ' ' + str(L2WAYS_big) + ' ' + str(L2SIZE_mid1) + ' ' + str(L2WAYS_mid1) + ' ' + str(L3SIZE) + ' ' + str(L3WAYS) + ' ' + str(MEM_TECH) + ' ' + str(CORE_DYN_ENERGY) + ' ' + str(CORE_STA_ENERGY) + ' ' + str(l1_1) + ' ' + str(l1_2) + ' ' + str(l1_3) + ' ' + str(l1_4) + ' ' + str(l2_1) + ' ' + str(l2_2) + ' ' + str(l3))
 
 
 

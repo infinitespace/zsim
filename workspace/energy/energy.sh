@@ -73,9 +73,9 @@ L1_POWER_3=`cut -f7 -d " " cacti_L1_mid2.txt`
 L1_ENERGY_4=`cut -f6 -d " " cacti_L1_little.txt`
 L1_POWER_4=`cut -f7 -d " " cacti_L1_little.txt`
 L1_AREA_1=`cut -f8 -d " " cacti_L1_big.txt`      # L1 area
-L1_AREA_2=`cut -f8 -d " " cacti_L2_mid1.txt`     #
+L1_AREA_2=`cut -f8 -d " " cacti_L1_mid1.txt`     #
 L1_AREA_3=`cut -f8 -d " " cacti_L1_mid2.txt`     #   
-L1_AREA_4=`cut -f8 -d " " cacti_L2_little.txt`   #
+L1_AREA_4=`cut -f8 -d " " cacti_L1_little.txt`   #
 
 L2_ENERGY_1=`cut -f6 -d " " cacti_L2_big.txt`
 L2_POWER_1=`cut -f7 -d " " cacti_L2_big.txt`
