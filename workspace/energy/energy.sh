@@ -37,6 +37,14 @@ DRAM_TECH=`cut -f21 -d " " args.txt`
 CORE_DYN_ENERGY=`cut -f22 -d " " args.txt`
 CORE_STA_ENERGY=`cut -f23 -d " " args.txt`
 
+l1_1=`cut -f24 -d " " args.txt`
+l1_2=`cut -f25 -d " " args.txt`
+l1_3=`cut -f26 -d " " args.txt`
+l1_4=`cut -f27 -d " " args.txt`
+l2_1=`cut -f28 -d " " args.txt`
+l2_2=`cut -f29 -d " " args.txt`
+l3=`cut -f30 -d " " args.txt`
+
 ## Run CACTI 6.5 to get cache parameters
 L1_CACTI_big=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZE_1 -w $L1WAYS_1`
 L1_CACTI_mid1=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZE_2 -w $L1WAYS_2`
@@ -83,28 +91,13 @@ L3_AREA=`cut -f8 -d " " cacti_L3.txt`            # L3 area
 CORES=`echo $CORES_1+$CORES_2+$CORES_3+$CORES_4 | bc -l`
 
 # Beefy L1 cache energy
-L1_hGETS=`grep hGETS zsim.out | head -$[2*CORES_b] | awk '{sum += $2} END {print sum}'`
-L1_hGETX=`grep hGETX zsim.out | head -$[2*CORES_b] | awk '{sum += $2} END {print sum}'`
-L1_mGETS=`grep mGETS zsim.out | head -$[2*CORES_b] | awk '{sum += $2} END {print sum}'`
+L1_DYN_ENERGY=`echo "($l1_1*$L1_ENERGY_1+$l1_2*$L1_ENERGY_2+$l1_3*$L1_ENERGY_3+$l1_4*$L1_ENERGY_4)/1000000000" | bc -l`
+L1_STA_ENERGY=`echo "($CORES_1*$L1_POWER_1+$CORES_2*$L1_POWER_2+$CORES_3*$L1_POWER_3+$CORES_4*$L1_POWER_4)/1000*$TIME" | bc -l`
 
-L1_DYN_ENERGY=`echo "($L1_hGETS+$L1_hGETX+$L1_mGETS)*$L1_ENERGY_1/1000000000" | bc -l`
-L1_STA_ENERGY=`echo "$CORES_1*$L1_POWER_1/1000*$TIME" | bc -l`
+L2_DYN_ENERGY=`echo "($l2_1*$L2_ENERGY_1+$l2_2*$L2_ENERGY_2)/1000000000" | bc -l`
+L2_STA_ENERGY=`echo "($CORES_1*$L2_POWER_1+$CORES_2*$L2_POWER_2)/1000*$TIME" | bc -l`
 
-tmp_L2_hGETS=`grep hGETS zsim.out | head -$[3*CORES_b] | awk '{sum += $2} END {print sum}'`
-L2_hGETS=$[tmp_L2_hGETS - L1_hGETS]
-tmp_L2_hGETX=`grep hGETX zsim.out | head -$[3*CORES_b] | awk '{sum += $2} END {print sum}'`
-L2_hGETX=$[tmp_L2_hGETX - L1_hGETX]
-tmp_L2_mGETS=`grep mGETS zsim.out | head -$[3*CORES_b] | awk '{sum += $2} END {print sum}'`
-L2_mGETS=$[tmp_L2_mGETS - L1_mGETS]
-
-L2_DYN_ENERGY=`echo "($L2_hGETS+$L2_hGETX+$L2_mGETS)*$L2_ENERGY/1000000000" | bc -l`
-L2_STA_ENERGY=`echo "$CORES_b*$L2_POWER/1000*$TIME" | bc -l`
-
-L3_hGETS=`grep hGETS zsim.out | tail -1 | awk '{print $2}'`
-L3_hGETX=`grep hGETX zsim.out | tail -1 | awk '{print $2}'`
-L3_mGETS=`grep mGETS zsim.out | tail -1 | awk '{print $2}'`
-
-L3_DYN_ENERGY=`echo "($L3_hGETS+$L3_hGETX+$L3_mGETS)*$L3_ENERGY/1000000000" | bc -l`
+L3_DYN_ENERGY=`echo "$l3*$L3_ENERGY/1000000000" | bc -l`
 L3_STA_ENERGY=`echo "$L3_POWER/1000*$TIME" | bc -l`
 
 MEM_RD=`grep -w rd zsim.out | awk '{print $2}' | paste -sd+ | bc`
@@ -117,8 +110,12 @@ MEM_STA_ENERGY=`python /afs/ir/class/ee282/pa1/bin/mem.py $DRAM_TECH $MEM_RD $ME
 TOTAL_ENERGY=`echo $CORE_DYN_ENERGY+$CORE_STA_ENERGY+$L1_DYN_ENERGY+$L1_STA_ENERGY+$L2_DYN_ENERGY+$L2_STA_ENERGY+$L3_DYN_ENERGY+$L3_STA_ENERGY+$MEM_DYN_ENERGY+$MEM_STA_ENERGY | bc -l`
 EDP=`echo $TOTAL_ENERGY*$TIME | bc -l`
 
+TOTAL_POWER=`echo $TOTAL_ENERGY/$TIME | bc -l`
+
 echo "Execution    time (s)  : $TIME"
 echo "Cores                  : $CORES"
+echo "Total energy (J)       : $TOTAL_ENERGY"
+echo "Total power (W)        : $TOTAL_POWER"
 echo "L1 dynamic energy (J)  : $L1_DYN_ENERGY"
 echo "L1 static energy (J)   : $L1_STA_ENERGY"
 echo "L2 dynamic energy (J)  : $L2_DYN_ENERGY"
@@ -128,12 +125,5 @@ echo "L3 static energy (J)   : $L3_STA_ENERGY"
 echo "Mem dynamic energy (J) : $MEM_DYN_ENERGY"
 echo "Mem static energy (J)  : $MEM_STA_ENERGY"
 
-#echo "$L1_ENERGY_b"
-#echo "$L1_POWER_b"
-#echo "$L2_ENERGY"
-#echo "$L2_POWER"
-#echo "$L2_AREA"
-#echo "$L3_ENERGY"
-#echo "$L3_POWER"
-#echo "$L3_AREA"
+
 

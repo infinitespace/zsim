@@ -6,7 +6,7 @@ import numpy as np
 import parse_cfg as ps
 
 CFG_PATH = '../config/het.cfg'
-ZSIMH5_PATH = '~/cs316/zsim_build/downloads/zsim/workspace/run/zsim-ev.h5'
+ZSIMH5_PATH = '../run/zsim-ev.h5'
 
 cfg = ps.parse(CFG_PATH)
 
@@ -56,6 +56,18 @@ endPhase = dset[-1]['phase']
 ccycles = endPhase * phaseLength
 TIME = float(ccycles / frequency) * 0.000001
 
+# Cache hits and misses
+l1_1 = np.sum(dset[-1]['l1i_big']['hGETS']+dset[-1]['l1d_big']['hGETS']+dset[-1]['l1i_big']['hGETX']+dset[-1]['l1d_big']['hGETX']+dset[-1]['l1i_big']['mGETS']+dset[-1]['l1d_big']['mGETS'])
+l1_2 = np.sum(dset[-1]['l1i_mid1']['hGETS'])+np.sum(dset[-1]['l1d_mid1']['hGETS'])+np.sum(dset[-1]['l1i_mid1']['hGETX'])+np.sum(dset[-1]['l1d_mid1']['hGETX'])+np.sum(dset[-1]['l1i_mid1']['mGETS'])+np.sum(dset[-1]['l1d_mid1']['mGETS'])
+l1_3 = np.sum(dset[-1]['l1i_mid2']['hGETS'])+np.sum(dset[-1]['l1d_mid2']['hGETS'])+np.sum(dset[-1]['l1i_mid2']['hGETX'])+np.sum(dset[-1]['l1d_mid2']['hGETX'])+np.sum(dset[-1]['l1i_mid2']['mGETS'])+np.sum(dset[-1]['l1d_mid2']['mGETS'])
+l1_4 = np.sum(dset[-1]['l1i_little']['hGETS'])+np.sum(dset[-1]['l1d_little']['hGETS'])+np.sum(dset[-1]['l1i_little']['hGETX'])+np.sum(dset[-1]['l1d_little']['hGETX'])+np.sum(dset[-1]['l1i_little']['mGETS'])+np.sum(dset[-1]['l1d_little']['mGETS'])
+
+l2_1 = np.sum(dset[-1]['l2_big']['hGETS'] + dset[-1]['l2_big']['hGETX'] + dset[-1]['l2_big']['mGETS'])
+l2_2 = np.sum(dset[-1]['l2_mid1']['hGETS'] + dset[-1]['l2_mid1']['hGETX'] + dset[-1]['l2_mid1']['mGETS'])
+
+l3 = np.sum(dset[-1]['l3']['hGETS'] + dset[-1]['l3']['hGETX'] + dset[-1]['l3']['mGETS'])
+
+
 # Core Voltage depends on core type. w indicate type OOO, n idicate Simple
 CORE_VOLTAGE_w = (frequency/1000) * .30914 + .552688
 CORE_VOLTAGE_n = (frequency/1000) * .21967 + .66066 
@@ -65,8 +77,6 @@ instrs1 = np.sum(dset[-1]['big']['instrs'])
 instrs2 = np.sum(dset[-1]['mid1']['instrs']) 
 instrs3 = np.sum(dset[-1]['mid2']['instrs']) 
 instrs4 = np.sum(dset[-1]['littl2']['instrs'])
-instructions = instrs1 + instrs2 + instrs3 + instrs4
-print instrs1, instrs2, instrs3, instrs4
 
 # Core Energy Model
 I_leak_w=1.3136495
@@ -79,7 +89,7 @@ CORE_DYN_ENERGY=CORE_DYN_ENERGY_w+CORE_DYN_ENERGY_n
 CORE_STA_ENERGY=CORE_STA_ENERGY_w+CORE_STA_ENERGY_n
 
 f = open('args.txt', 'w')
-f.write(str(TIME) + ' ' + str(frequency) + ' ' + str(cores_big) + ' ' + str(cores_mid1) + ' ' + str(cores_mid2) + ' ' + str(cores_little) + ' ' + str(L1ISIZE_big) + ' ' + str(L1IWAYS_big) + ' ' + str(L1ISIZE_mid1) + ' ' + str(L1IWAYS_mid1) + ' ' + str(L1ISIZE_mid2) + ' ' + str(L1IWAYS_mid2) + ' ' + str(L1ISIZE_little) + ' ' + str(L1IWAYS_little) + ' ' + str(L2SIZE_big) + ' ' + str(L2WAYS_big) + ' ' + str(L2SIZE_mid1) + ' ' + str(L2WAYS_mid1) + ' ' + str(L3SIZE) + ' ' + str(L3WAYS) + ' ' + str(MEM_TECH) + ' ' + str(CORE_DYN_ENERGY) + ' ' + str(CORE_STA_ENERGY))
+f.write(str(TIME) + ' ' + str(frequency) + ' ' + str(cores_big) + ' ' + str(cores_mid1) + ' ' + str(cores_mid2) + ' ' + str(cores_little) + ' ' + str(L1ISIZE_big) + ' ' + str(L1IWAYS_big) + ' ' + str(L1ISIZE_mid1) + ' ' + str(L1IWAYS_mid1) + ' ' + str(L1ISIZE_mid2) + ' ' + str(L1IWAYS_mid2) + ' ' + str(L1ISIZE_little) + ' ' + str(L1IWAYS_little) + ' ' + str(L2SIZE_big) + ' ' + str(L2WAYS_big) + ' ' + str(L2SIZE_mid1) + ' ' + str(L2WAYS_mid1) + ' ' + str(L3SIZE) + ' ' + str(L3WAYS) + ' ' + str(MEM_TECH) + ' ' + str(CORE_DYN_ENERGY) + ' ' + str(CORE_STA_ENERGY) + ' ' + str(l1_1) + ' ' + str(l1_2) + ' ' + str(l1_3) + ' ' + str(l1_4) + ' ' + str(l2_1) + ' ' + str(l2_2) + ' ' + str(l3))
 
 
 
