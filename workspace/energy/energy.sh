@@ -5,55 +5,90 @@ set -e
 debug() { echo "D> $*" 1>&2; }
 
 MAIN_PATH=~/cs316/zsim_build/downloads/zsim/workspace/energy/src
+PY_PATH=~/cs316/zsim_build/downloads/zsim/workspace/energy/extract.py
+
+python $PY_PATH
 
 ## configuration parameters
 TIME=`cut -f1 -d " " args.txt`
 FREQUENCY=`cut -f2 -d " " args.txt`
-CORES_b=`cut -f3 -d " " args.txt`
-CORES_w=`cut -f4 -d " " args.txt`
-L1SIZEb=`cut -f5 -d " " args.txt`
-L1WAYSb=`cut -f6 -d " " args.txt`
-L1SIZEw=`cut -f7 -d " " args.txt`
-L1WAYSw=`cut -f8 -d " " args.txt`
-L2SIZE=`cut -f9 -d " " args.txt`
-L2WAYS=`cut -f10 -d " " args.txt`
-L3SIZE=`cut -f11 -d " " args.txt`
-L3WAYS=`cut -f12 -d " " args.txt`
-DRAM_TECH=`cut -f13 -d " " args.txt`
-CORE_DYN_ENERGY=`cut -f14 -d " " args.txt`
-CORE_STA_ENERGY=`cut -f15 -d " " args.txt`
+CORES_1=`cut -f3 -d " " args.txt`
+CORES_2=`cut -f4 -d " " args.txt`
+CORES_3=`cut -f5 -d " " args.txt`
+CORES_4=`cut -f6 -d " " args.txt`
+
+L1SIZE_1=`cut -f7 -d " " args.txt`
+L1WAYS_1=`cut -f8 -d " " args.txt`
+L1SIZE_2=`cut -f9 -d " " args.txt`
+L1WAYS_2=`cut -f10 -d " " args.txt`
+L1SIZE_3=`cut -f11 -d " " args.txt`
+L1WAYS_3=`cut -f12 -d " " args.txt`
+L1SIZE_4=`cut -f13 -d " " args.txt`
+L1WAYS_4=`cut -f14 -d " " args.txt`
+
+L2SIZE_1=`cut -f15 -d " " args.txt`
+L2WAYS_1=`cut -f16 -d " " args.txt`
+L2SIZE_2=`cut -f17 -d " " args.txt`
+L2WAYS_2=`cut -f18 -d " " args.txt`
+
+L3SIZE=`cut -f19 -d " " args.txt`
+L3WAYS=`cut -f20 -d " " args.txt`
+DRAM_TECH=`cut -f21 -d " " args.txt`
+CORE_DYN_ENERGY=`cut -f22 -d " " args.txt`
+CORE_STA_ENERGY=`cut -f23 -d " " args.txt`
 
 ## Run CACTI 6.5 to get cache parameters
-L1_CACTI_beefy=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZEb -w $L1WAYSb`
-L1_CACTI_wimpy=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZEw -w $L1WAYSw`
-L2_CACTI=`sh $MAIN_PATH/gen_cacti.sh -s $L2SIZE -w $L2WAYS`
-L3_CACTI=`sh $MAIN_PATH/gen_cacti.sh -s 12288 -w $L3WAYS`
+L1_CACTI_big=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZE_1 -w $L1WAYS_1`
+L1_CACTI_mid1=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZE_2 -w $L1WAYS_2`
+L1_CACTI_mid2=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZE_3 -w $L1WAYS_3`
+L1_CACTI_little=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZE_4 -w $L1WAYS_4`
 
-echo $L1_CACTI_beefy > cacti_L1_beefy.txt
-echo $L1_CACTI_wimpy > cacti_L1_wimpy.txt
-echo $L2_CACTI > cacti_L2.txt
+L2_CACTI_big=`sh $MAIN_PATH/gen_cacti.sh -s $L2SIZE_1 -w $L2WAYS_1`
+L2_CACTI_mid1=`sh $MAIN_PATH/gen_cacti.sh -s $L2SIZE_2 -w $L2WAYS_2`
+
+L3_CACTI=`sh $MAIN_PATH/gen_cacti.sh -s $L3SIZE -w $L3WAYS`
+
+echo $L1_CACTI_big > cacti_L1_big.txt
+echo $L1_CACTI_mid1 > cacti_L1_mid1.txt
+echo $L1_CACTI_mid2 > cacti_L1_mid2.txt
+echo $L1_CACTI_little > cacti_L1_little.txt
+echo $L2_CACTI_big > cacti_L2_big.txt
+echo $L2_CACTI_mid1 > cacti_L2_mid1.txt
 echo $L3_CACTI > cacti_L3.txt
 
-L1_ENERGY_b=`cut -f6 -d " " cacti_L1_beefy.txt`
-L1_POWER_b=`cut -f7 -d " " cacti_L1_beefy.txt`
-L1_ENERGY_w=`cut -f6 -d " " cacti_L1_wimpy.txt`
-L1_POWER_w=`cut -f7 -d " " cacti_L1_wimpy.txt`
-L2_ENERGY=`cut -f6 -d " " cacti_L2.txt`
-L2_POWER=`cut -f7 -d " " cacti_L2.txt`
-L2_AREA=`cut -f8 -d " " cacti_L2.txt`
+L1_ENERGY_1=`cut -f6 -d " " cacti_L1_big.txt`
+L1_POWER_1=`cut -f7 -d " " cacti_L1_big.txt`
+L1_ENERGY_2=`cut -f6 -d " " cacti_L1_mid1.txt`
+L1_POWER_2=`cut -f7 -d " " cacti_L1_mid1.txt`
+L1_ENERGY_3=`cut -f6 -d " " cacti_L1_mid2.txt`
+L1_POWER_3=`cut -f7 -d " " cacti_L1_mid2.txt`
+L1_ENERGY_4=`cut -f6 -d " " cacti_L1_little.txt`
+L1_POWER_4=`cut -f7 -d " " cacti_L1_little.txt`
+L1_AREA_1=`cut -f8 -d " " cacti_L1_big.txt`      # L1 area
+L1_AREA_2=`cut -f8 -d " " cacti_L2_mid1.txt`     #
+L1_AREA_3=`cut -f8 -d " " cacti_L1_mid2.txt`     #   
+L1_AREA_4=`cut -f8 -d " " cacti_L2_little.txt`   #
+
+L2_ENERGY_1=`cut -f6 -d " " cacti_L2_big.txt`
+L2_POWER_1=`cut -f7 -d " " cacti_L2_big.txt`
+L2_ENERGY_2=`cut -f6 -d " " cacti_L2_mid1.txt`
+L2_POWER_2=`cut -f7 -d " " cacti_L2_mid1.txt`
+L2_AREA_1=`cut -f8 -d " " cacti_L2_big.txt`      # L2 area
+L2_AREA_2=`cut -f8 -d " " cacti_L2_mid1.txt`     #
+
 L3_ENERGY=`cut -f6 -d " " cacti_L3.txt`
 L3_POWER=`cut -f7 -d " " cacti_L3.txt`
-L3_AREA=`cut -f8 -d " " cacti_L3.txt`
+L3_AREA=`cut -f8 -d " " cacti_L3.txt`            # L3 area
 
-CORES=`echo $CORES_b+$CORES_w | bc -l`
+CORES=`echo $CORES_1+$CORES_2+$CORES_3+$CORES_4 | bc -l`
 
 # Beefy L1 cache energy
 L1_hGETS=`grep hGETS zsim.out | head -$[2*CORES_b] | awk '{sum += $2} END {print sum}'`
 L1_hGETX=`grep hGETX zsim.out | head -$[2*CORES_b] | awk '{sum += $2} END {print sum}'`
 L1_mGETS=`grep mGETS zsim.out | head -$[2*CORES_b] | awk '{sum += $2} END {print sum}'`
 
-L1_DYN_ENERGY=`echo "($L1_hGETS+$L1_hGETX+$L1_mGETS)*$L1_ENERGY_b/1000000000" | bc -l`
-L1_STA_ENERGY=`echo "$CORES_b*$L1_POWER_b/1000*$TIME" | bc -l`
+L1_DYN_ENERGY=`echo "($L1_hGETS+$L1_hGETX+$L1_mGETS)*$L1_ENERGY_1/1000000000" | bc -l`
+L1_STA_ENERGY=`echo "$CORES_1*$L1_POWER_1/1000*$TIME" | bc -l`
 
 tmp_L2_hGETS=`grep hGETS zsim.out | head -$[3*CORES_b] | awk '{sum += $2} END {print sum}'`
 L2_hGETS=$[tmp_L2_hGETS - L1_hGETS]
@@ -83,6 +118,7 @@ TOTAL_ENERGY=`echo $CORE_DYN_ENERGY+$CORE_STA_ENERGY+$L1_DYN_ENERGY+$L1_STA_ENER
 EDP=`echo $TOTAL_ENERGY*$TIME | bc -l`
 
 echo "Execution    time (s)  : $TIME"
+echo "Cores                  : $CORES"
 echo "L1 dynamic energy (J)  : $L1_DYN_ENERGY"
 echo "L1 static energy (J)   : $L1_STA_ENERGY"
 echo "L2 dynamic energy (J)  : $L2_DYN_ENERGY"
