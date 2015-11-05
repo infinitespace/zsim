@@ -1489,6 +1489,9 @@ int main(int argc, char *argv[]) {
     PIN_AddInternalExceptionHandler(InternalExceptionHandler, nullptr);
 
     procIdx = KnobProcIdx.Value();
+    
+    cout<<"OOOOOOOOOOOOOOOOOOOOOOOOOOO>>>>>>>>>>"<<procIdx<<endl;
+
     char header[64];
     snprintf(header, sizeof(header), "[S %d] ", procIdx);
     std::stringstream logfile_ss;
