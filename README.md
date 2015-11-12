@@ -4,6 +4,8 @@ Fork from git@github.com:gaomy3832/zsim.git
 
 In order to simulate thread mapping in very large  heterogenous system.
 
+0. To grant access: kinit wenbo6@stanford.edu && aklog
+
 1. To build zsim:
 ```
 mkdir ~/cs316
