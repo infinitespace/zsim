@@ -1546,6 +1546,16 @@ int main(int argc, char *argv[]) {
 
     assert((uint32_t)procIdx < zinfo->numProcs);
     procTreeNode = zinfo->procArray[procIdx];
+    
+    //======== start debug mask modification ==========
+    cout<<"======= mask for process: "<<procIdx<<endl;
+    g_vector<bool> tmpmask = procTreeNode->getMask();
+    for(unsigned i=0; i<tmpmask.size(); i++){
+	cout<<tmpmask[i]<<' ';
+    }
+    cout<<endl<<"===================="<<endl;
+    //======== end debug mask modification ==========
+
     if (!masterProcess) procTreeNode->notifyStart(); //masterProcess notifyStart is called in init() to avoid races
     assert(procTreeNode->getProcIdx() == (uint32_t)procIdx); //must be consistent
 

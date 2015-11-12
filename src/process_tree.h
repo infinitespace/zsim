@@ -31,6 +31,7 @@
 #include "galloc.h"
 #include "log.h"
 #include "zsim.h"
+#include <fstream>
 
 class Config;
 

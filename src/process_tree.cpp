@@ -25,6 +25,7 @@
 
 #include "process_tree.h"
 #include <sstream>
+#include <fstream>
 #include <stdlib.h>
 #include <string>
 #include <vector>
@@ -185,8 +186,29 @@ static void PopulateLevel(Config& config, const std::string& prefix, std::vector
         if (!zinfo->traceDriven) {
             mask = ParseMask(config.get<const char*>(p_ss.str() +  ".mask", DefaultMaskStr().c_str()), zinfo->numCores);
         }  //  else leave mask empty, no cores
-        g_vector<uint64_t> ffiPoints(ParseList<uint64_t>(config.get<const char*>(p_ss.str() +  ".ffiPoints", "")));
+        
+        //======== start mask modification ==========
+	// change mask by map.cfg
+        
+        string MAP_FILE = "/afs/.ir/users/w/e/wenbo6/cs316/zsim_build/downloads/zsim/workspace/config/map.cfg";
+        std::ifstream mapfile;
+	mapfile.open(MAP_FILE);
+        string map;
+        if (mapfile.is_open()){
+	    getline(mapfile, map);
+	}
+        else info("Cannot open map.cfg");
+        
+	if(map.size() > 0) info("Successfully got mask map from map.cfg");
+	for(unsigned i=0; i<mask.size(); i++){
+	    mask[i] = false;
+    	}
+	mask[22] = true;
+	
+        //======== end debug mask modification ==========
 
+	g_vector<uint64_t> ffiPoints(ParseList<uint64_t>(config.get<const char*>(p_ss.str() +  ".ffiPoints", "")));
+	
         if (dumpInstrs) {
             if (dumpHeartbeats) warn("Dumping eventual stats on both heartbeats AND instructions; you won't be able to distinguish both!");
             auto getInstrs = [procIdx]() { return zinfo->processStats->getProcessInstrs(procIdx); };
