@@ -5,9 +5,12 @@ set -e
 debug() { echo "D> $*" 1>&2; }
 
 MAIN_PATH=~/cs316/zsim_build/downloads/zsim/workspace/energy/src
-PY_PATH=~/cs316/zsim_build/downloads/zsim/workspace/energy/extract.py
+PY_PATH=~/cs316/zsim_build/downloads/zsim/workspace/energy/parse_h5.py
 
-python $PY_PATH
+ZSIM_CFG_PATH="../config/het.cfg"
+ZSIM_H5_PATH="../run/zsim-ev.h5"
+
+python $PY_PATH $ZSIM_CFG_PATH $ZSIM_H5_PATH
 
 ## configuration parameters
 TIME=`cut -f1 -d " " args.txt`
