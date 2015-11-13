@@ -8,7 +8,7 @@ def parse(filename):
     while idx < lennum:
         lines[idx] = lines[idx].strip()
         lines[idx] = lines[idx].strip('\t\n')
-        if len(lines[idx]) == 0: 
+        if len(lines[idx]) == 0 or lines[:1] == "//": 
             del lines[idx]
             lennum -= 1
         else:

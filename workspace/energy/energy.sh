@@ -4,11 +4,11 @@ set -e
 
 debug() { echo "D> $*" 1>&2; }
 
-MAIN_PATH=~/cs316/zsim_build/downloads/zsim/workspace/energy/src
-PY_PATH=~/cs316/zsim_build/downloads/zsim/workspace/energy/parse_h5.py
-
-ZSIM_CFG_PATH="../config/het.cfg"
-ZSIM_H5_PATH="../run/zsim-ev.h5"
+WORK_PATH=~/cs316/zsim_build/downloads/zsim/workspace
+MAIN_PATH=$WORK_PATH/energy/src
+PY_PATH=$WORK_PATH/energy/parse_h5.py
+ZSIM_CFG_PATH=$WORK_PATH/config/het.cfg
+ZSIM_H5_PATH=$WORK_PATH/run/zsim-ev.h5
 
 python $PY_PATH $ZSIM_CFG_PATH $ZSIM_H5_PATH
 
