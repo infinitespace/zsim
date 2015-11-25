@@ -18,9 +18,31 @@ import parse_cfg as ps
 
 
 def addProcess(procs):
-    procs.append("~/cs316/zsim_build/downloads/zsim/misc/hooks/test_cpp")
-    procs.append("~/cs316/zsim_build/downloads/zsim/misc/hooks/test_cpp")
-    procs.append("~/cs316/zsim_build/downloads/zsim/misc/hooks/test_cpp")
+    workload_small(procs)
+
+def workload_small(procs):
+    procs.append("parsecmgmt -a run -p blackscholes")
+    procs.append("parsecmgmt -a run -p bodytrack")
+    procs.append("parsecmgmt -a run -p streamcluster")
+
+
+
+def workload_medium(procs):
+    procs.append("parsecmgmt -a run -p bodytrack")
+    procs.append("parsecmgmt -a run -p streamcluster")
+    procs.append("parsecmgmt -a run -p x264")
+
+
+def workload_large(procs):
+    procs.append("parsecmgmt -a run -p facesim")
+    procs.append("parsecmgmt -a run -p fluidanimate")
+
+
+def workload_huge(procs):
+    procs.append("parsecmgmt -a run -p ferret")
+    procs.append("parsecmgmt -a run -p canneal")
+    procs.append("parsecmgmt -a run -p freqmine")
+
 
 def loadCfgFile(filename):
     config = ps.parse(filename)
