@@ -24,11 +24,14 @@
  */
 
 #include "process_tree.h"
+#include <iostream>
 #include <sstream>
 #include <fstream>
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#include <set>
+#include <stdlib.h>
 #include "config.h"
 #include "constants.h"
 #include "event_queue.h"
@@ -187,27 +190,68 @@ static void PopulateLevel(Config& config, const std::string& prefix, std::vector
             mask = ParseMask(config.get<const char*>(p_ss.str() +  ".mask", DefaultMaskStr().c_str()), zinfo->numCores);
         }  //  else leave mask empty, no cores
         
+
         //======== start mask modification ==========
-	// change mask by map.cfg
-        
-        string MAP_FILE = "/afs/.ir/users/w/e/wenbo6/cs316/zsim_build/downloads/zsim/workspace/config/map.cfg";
+	    // change mask by map.data
+        // set parameters
+        string MAP_FILE = "/afs/.ir/users/w/e/wenbo6/cs316/zsim_build/downloads/zsim/workspace/config/map.dat";
+        int TOTAL_CORE_TYPES = 4;
+        int ONE_TYPE_CORE_NUM = zinfo->numCores/TOTAL_CORE_TYPES;
+
         std::ifstream mapfile;
-	mapfile.open(MAP_FILE);
-        string map;
-        if (mapfile.is_open()){
-	    getline(mapfile, map);
-	}
-        else info("Cannot open map.cfg");
+        mapfile.open(MAP_FILE);
         
-	if(map.size() > 0) info("Successfully got mask map from map.cfg");
-	for(unsigned i=0; i<mask.size(); i++){
-	    mask[i] = false;
-    	}
-	mask[22] = true;
-	
+        if (mapfile.is_open()){
+            bool fail = false;
+            string line;
+
+            // jump to the line for 'procIdx'
+            for(unsigned i = 0; i <= procIdx; i++){ 
+                getline(mapfile,line);
+            }
+            int delimeter_idx = line.find(',');
+
+            // get core type and core number for this process
+            int coreType, coreNum; 
+            if(delimeter_idx == -1){
+                fail = true;
+            } 
+            else{
+                coreType = std::stoi(line.substr(0, delimeter_idx));
+                coreNum = std::stoi(line.substr(delimeter_idx+1));
+                if(coreType < 0 || coreType > TOTAL_CORE_TYPES - 1) fail = true;
+                if(coreNum < 1 || coreNum > ONE_TYPE_CORE_NUM) fail = true;
+            }
+
+            // modify mask
+            if(!fail){
+                for(unsigned i = 0; i < mask.size(); i++){
+                    mask[i] = false;
+                }
+                std::set<int> used_cores;
+                int used_num = 0;
+                while(used_num < coreNum){
+                    int offset = rand()%ONE_TYPE_CORE_NUM;
+                    if(used_cores.find(offset) == used_cores.end()){
+                        mask[ONE_TYPE_CORE_NUM * coreType + offset] = true;
+                        used_num++;
+                    }
+                }
+                info("Process Id:%d, core type:%d, core num:%d", procIdx, coreType, coreNum);
+                for(unsigned i=0; i<mask.size(); i++){
+                    std::cout<<mask[i]<<' ';
+                }
+                std::cout<<'\n';
+            }
+            else{
+                info("!!! Error !!!: Map file is broken.");
+            }
+        }
+        else info("!!! Error !!!: Cannot open map.dat");
+        
         //======== end debug mask modification ==========
 
-	g_vector<uint64_t> ffiPoints(ParseList<uint64_t>(config.get<const char*>(p_ss.str() +  ".ffiPoints", "")));
+        g_vector<uint64_t> ffiPoints(ParseList<uint64_t>(config.get<const char*>(p_ss.str() +  ".ffiPoints", "")));
 	
         if (dumpInstrs) {
             if (dumpHeartbeats) warn("Dumping eventual stats on both heartbeats AND instructions; you won't be able to distinguish both!");

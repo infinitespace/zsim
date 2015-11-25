@@ -1551,7 +1551,7 @@ int main(int argc, char *argv[]) {
     cout<<"======= mask for process: "<<procIdx<<endl;
     g_vector<bool> tmpmask = procTreeNode->getMask();
     for(unsigned i=0; i<tmpmask.size(); i++){
-	cout<<tmpmask[i]<<' ';
+	   cout<<tmpmask[i]<<' ';
     }
     cout<<endl<<"===================="<<endl;
     //======== end debug mask modification ==========
