@@ -137,21 +137,4 @@ EDP=`echo $TOTAL_ENERGY*$TIME | bc -l`
 
 TOTAL_POWER=`echo $TOTAL_ENERGY/$TIME | bc -l`
 
-echo "----------------------------------------------"
-echo "------------------ Report --------------------"
-echo "Execution    time (s)  : $TIME"
-echo "Cores                  : $CORES"
-echo "Throughput (/s)        : $T"
-echo "Total power (W)        : $TOTAL_POWER"
-echo "Total energy (J)       : $TOTAL_ENERGY"
-echo "L1 dynamic energy (J)  : $L1_DYN_ENERGY"
-echo "L1 static energy (J)   : $L1_STA_ENERGY"
-echo "L2 dynamic energy (J)  : $L2_DYN_ENERGY"
-echo "L2 static energy (J)   : $L2_STA_ENERGY"
-echo "L3 dynamic energy (J)  : $L3_DYN_ENERGY"
-echo "L3 static energy (J)   : $L3_STA_ENERGY"
-echo "Mem dynamic energy (J) : $MEM_DYN_ENERGY"
-echo "Mem static energy (J)  : $MEM_STA_ENERGY"
-
-
-
+echo "$PID    $COREID    $T    $TOTAL_POWER" >> profile.txt
