@@ -24,11 +24,13 @@
  */
 
 #include "process_tree.h"
+#include <iostream>
 #include <sstream>
 #include <fstream>
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#include <set>
 #include <stdlib.h>
 #include "config.h"
 #include "constants.h"
@@ -226,9 +228,20 @@ static void PopulateLevel(Config& config, const std::string& prefix, std::vector
                 for(unsigned i = 0; i < mask.size(); i++){
                     mask[i] = false;
                 }
+                std::set<int> used_cores;
+                int used_num = 0;
+                while(used_num < coreNum){
+                    int offset = rand()%ONE_TYPE_CORE_NUM;
+                    if(used_cores.find(offset) == used_cores.end()){
+                        mask[ONE_TYPE_CORE_NUM * coreType + offset] = true;
+                        used_num++;
+                    }
+                }
                 info("Process Id:%d, core type:%d, core num:%d", procIdx, coreType, coreNum);
-                mask[ONE_TYPE_CORE_NUM * coreType] = true;
-                // info("%d", rand());
+                for(unsigned i=0; i<mask.size(); i++){
+                    std::cout<<mask[i]<<' ';
+                }
+                std::cout<<'\n';
             }
             else{
                 info("!!! Error !!!: Map file is broken.");
