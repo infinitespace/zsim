@@ -22,8 +22,8 @@ def addProcess(procs):
 
 def workload_small(procs):
     procs.append("parsecmgmt -a run -p blackscholes")
-    procs.append("parsecmgmt -a run -p bodytrack")
-    procs.append("parsecmgmt -a run -p streamcluster")
+    #procs.append("parsecmgmt -a run -p bodytrack")
+    #procs.append("parsecmgmt -a run -p streamcluster")
 
 
 
