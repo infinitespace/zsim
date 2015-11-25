@@ -190,11 +190,11 @@ static void PopulateLevel(Config& config, const std::string& prefix, std::vector
             mask = ParseMask(config.get<const char*>(p_ss.str() +  ".mask", DefaultMaskStr().c_str()), zinfo->numCores);
         }  //  else leave mask empty, no cores
         
-
+/*
         //======== start mask modification ==========
 	    // change mask by map.data
         // set parameters
-        string MAP_FILE = "/afs/.ir/users/w/e/wenbo6/cs316/zsim_build/downloads/zsim/workspace/config/map.dat";
+        string MAP_FILE = "/afs/.ir/users/x/y/xyyue/cs316/zsim_build/downloads/zsim/workspace/config/map.dat";
         int TOTAL_CORE_TYPES = 4;
         int ONE_TYPE_CORE_NUM = zinfo->numCores/TOTAL_CORE_TYPES;
 
@@ -250,7 +250,7 @@ static void PopulateLevel(Config& config, const std::string& prefix, std::vector
         else info("!!! Error !!!: Cannot open map.dat");
         
         //======== end debug mask modification ==========
-
+*/
         g_vector<uint64_t> ffiPoints(ParseList<uint64_t>(config.get<const char*>(p_ss.str() +  ".ffiPoints", "")));
 	
         if (dumpInstrs) {
