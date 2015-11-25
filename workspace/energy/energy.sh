@@ -7,8 +7,8 @@ debug() { echo "D> $*" 1>&2; }
 WORK_PATH=~/cs316/zsim_build/downloads/zsim/workspace
 MAIN_PATH=$WORK_PATH/energy/src
 PY_PATH=$WORK_PATH/energy/parse_h5.py
-ZSIM_CFG_PATH=$WORK_PATH/config/het.cfg
-ZSIM_H5_PATH=$WORK_PATH/run/zsim-ev.h5
+ZSIM_CFG_PATH=$WORK_PATH/config/$2
+ZSIM_H5_PATH=$WORK_PATH/run/$1
 
 python $PY_PATH $ZSIM_CFG_PATH $ZSIM_H5_PATH
 
@@ -47,6 +47,10 @@ l1_4=`cut -f27 -d " " args.txt`
 l2_1=`cut -f28 -d " " args.txt`
 l2_2=`cut -f29 -d " " args.txt`
 l3=`cut -f30 -d " " args.txt`
+
+IPC=`cut -f31 -d " " args.txt`
+PID=`cut -f32 -d " " args.txt`
+COREID=`cut -f32 -d " " args.txt`
 
 ## Run CACTI 6.5 to get cache parameters
 L1_CACTI_big=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZE_1 -w $L1WAYS_1`
@@ -94,12 +98,30 @@ L3_AREA=`cut -f8 -d " " cacti_L3.txt`            # L3 area
 CORES=`echo $CORES_1+$CORES_2+$CORES_3+$CORES_4 | bc -l`
 
 # Beefy L1 cache energy
+if [ "$COREID" = "0" ]
+then
+    L1_STA_ENERGY=`echo "$L1_POWER_1/1000*$TIME" | bc -l`
+    L2_STA_ENERGY=`echo "$L2_POWER_1/1000*$TIME" | bc -l`
+elif [ "$COREID" = "1" ]   
+then 
+    L1_STA_ENERGY=`echo "$L1_POWER_2/1000*$TIME" | bc -l`
+    L2_STA_ENERGY=`echo "$L2_POWER_2/1000*$TIME" | bc -l`
+elif [ "$COREID" = "2" ]
+then
+    L1_STA_ENERGY=`echo "$L1_POWER_3/1000*$TIME" | bc -l`
+    L2_STA_ENERGY=`echo "0" | bc -l`
+elif [ "$COREID" = "3" ]
+then
+    L1_STA_ENERGY=`echo "$L1_POWER_4/1000*$TIME" | bc -l`
+    L2_STA_ENERGY=`echo "0" | bc -l`
+else    
+    L1_STA_ENERGY=`echo "($CORES_1*$L1_POWER_1+$CORES_2*$L1_POWER_2+$CORES_3*$L1_POWER_3+$CORES_4*$L1_POWER_4)/1000*$TIME" | bc -l`
+    L2_STA_ENERGY=`echo "($CORES_1*$L2_POWER_1+$CORES_2*$L2_POWER_2)/1000*$TIME" | bc -l`
+fi
+
+
 L1_DYN_ENERGY=`echo "($l1_1*$L1_ENERGY_1+$l1_2*$L1_ENERGY_2+$l1_3*$L1_ENERGY_3+$l1_4*$L1_ENERGY_4)/1000000000" | bc -l`
-L1_STA_ENERGY=`echo "($CORES_1*$L1_POWER_1+$CORES_2*$L1_POWER_2+$CORES_3*$L1_POWER_3+$CORES_4*$L1_POWER_4)/1000*$TIME" | bc -l`
-
 L2_DYN_ENERGY=`echo "($l2_1*$L2_ENERGY_1+$l2_2*$L2_ENERGY_2)/1000000000" | bc -l`
-L2_STA_ENERGY=`echo "($CORES_1*$L2_POWER_1+$CORES_2*$L2_POWER_2)/1000*$TIME" | bc -l`
-
 L3_DYN_ENERGY=`echo "$l3*$L3_ENERGY/1000000000" | bc -l`
 L3_STA_ENERGY=`echo "$L3_POWER/1000*$TIME" | bc -l`
 
@@ -115,10 +137,15 @@ EDP=`echo $TOTAL_ENERGY*$TIME | bc -l`
 
 TOTAL_POWER=`echo $TOTAL_ENERGY/$TIME | bc -l`
 
+echo "----------------------------------------------"
+echo "------------------ Report --------------------"
 echo "Execution    time (s)  : $TIME"
 echo "Cores                  : $CORES"
-echo "Total energy (J)       : $TOTAL_ENERGY"
+echo "Process ID             : $PID"
+echo "Core Type              : $COREID"
+echo "Throughput (IPC)       : $IPC"
 echo "Total power (W)        : $TOTAL_POWER"
+echo "Total energy (J)       : $TOTAL_ENERGY"
 echo "L1 dynamic energy (J)  : $L1_DYN_ENERGY"
 echo "L1 static energy (J)   : $L1_STA_ENERGY"
 echo "L2 dynamic energy (J)  : $L2_DYN_ENERGY"
