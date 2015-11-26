@@ -137,6 +137,10 @@ EDP=`echo $TOTAL_ENERGY*$TIME | bc -l`
 
 TOTAL_POWER=`echo $TOTAL_ENERGY/$TIME | bc -l`
 
+CORE_DYN_POWER=`echo $CORE_DYN_ENERGY/$TIME | bc -l`
+CORE_STA_POWER=`echo $CORE_STA_ENERGY/$TIME | bc -l`
+
+
 echo "----------------------------------------------"
 echo "------------------ Report --------------------"
 echo "Execution    time (s)  : $TIME"
@@ -144,6 +148,11 @@ echo "Cores                  : $CORES"
 echo "Throughput (/s)        : $T"
 echo "Total power (W)        : $TOTAL_POWER"
 echo "Total energy (J)       : $TOTAL_ENERGY"
+echo "Core dynamic power (W) : $CORE_DYN_POWER"
+echo "Core dynamic energy (J): $CORE_DYN_ENERGY"
+echo "Core static power (W)  : $CORE_STA_POWER"
+echo "Core static energy (J) : $CORE_STA_ENERGY"
+
 echo "L1 dynamic energy (J)  : $L1_DYN_ENERGY"
 echo "L1 static energy (J)   : $L1_STA_ENERGY"
 echo "L2 dynamic energy (J)  : $L2_DYN_ENERGY"
