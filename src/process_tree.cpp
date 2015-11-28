@@ -197,7 +197,9 @@ static void PopulateLevel(Config& config, const std::string& prefix, std::vector
         // get working dir
         char* CONF_DIR;
         CONF_DIR = getenv("CONF_DIR");
+        if(strlen(CONF_DIR) == 0) info("!!!ERROR!!!: NOT set enviroment variable CONF_DIR in the env.sh file");
         string MAP_FILE = std::string(CONF_DIR, strlen(CONF_DIR)) + "/map.dat";
+        
         info("load map.dat from this path:%s", MAP_FILE.c_str());
         int TOTAL_CORE_TYPES = 4;
         int ONE_TYPE_CORE_NUM = zinfo->numCores/TOTAL_CORE_TYPES;
