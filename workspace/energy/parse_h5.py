@@ -9,16 +9,13 @@ import sys
 if __name__ == "__main__":
 	CFG_PATH = sys.argv[1]  
 	ZSIMH5_PATH = sys.argv[2] 
-	# CFG_PATH = '../config/het.cfg'
-	# ZSIMH5_PATH = '../run/zsim-ev.h5'
 
 	my_list = []
 	for i in ZSIMH5_PATH:
 		if i.isdigit():
 			my_list.append(i)
-	my_list.pop()
 	 
-	if len(my_list) == 5:
+	if len(my_list) == 6:
 		PID = my_list[3]
 		COREID = my_list[4]
 	else:
@@ -95,12 +92,12 @@ if __name__ == "__main__":
 	instrs4 = np.sum(dset[-1]['little']['instrs'])
  
 	instructions = instrs1 + instrs2 + instrs3 + instrs4
-	IPC = float(instructions / ccycles) 
+	T = 1.0 / TIME
 
 	# Core Energy Model
 	I_leak_w=1.3136495
 	I_leak_n=0.45455
-	if  len(my_list) == 3:
+	if  len(my_list) == 4:
 		cores_w = cores_big+cores_mid1
 		cores_n = cores_mid2+cores_little
 	else:
@@ -125,6 +122,6 @@ if __name__ == "__main__":
 	line += str(L1WAYS_mid2) + ' ' + str(L1SIZE_little) + ' ' + str(L1WAYS_little) + ' ' + str(L2SIZE_big) + ' ' + str(L2WAYS_big) + ' '
 	line += str(L2SIZE_mid1) + ' ' + str(L2WAYS_mid1) + ' ' + str(L3SIZE) + ' ' + str(L3WAYS) + ' ' + str(MEM_TECH) + ' ' 
 	line += str(CORE_DYN_ENERGY) + ' ' + str(CORE_STA_ENERGY) + ' ' + str(l1_1) + ' ' + str(l1_2) + ' ' + str(l1_3) + ' '
-	line += str(l1_4) + ' ' + str(l2_1) + ' ' + str(l2_2) + ' ' + str(l3) + ' ' + str(IPC) + ' ' + str(PID) + ' ' + str(COREID)
+	line += str(l1_4) + ' ' + str(l2_1) + ' ' + str(l2_2) + ' ' + str(l3) + ' ' + str(T) + ' ' + str(PID) + ' ' + str(COREID)
 
 	f.write(line)
