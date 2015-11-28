@@ -9,16 +9,13 @@ import sys
 if __name__ == "__main__":
 	CFG_PATH = sys.argv[1]  
 	ZSIMH5_PATH = sys.argv[2] 
-	# CFG_PATH = '../config/het.cfg'
-	# ZSIMH5_PATH = '../run/zsim-ev.h5'
 
 	my_list = []
 	for i in ZSIMH5_PATH:
 		if i.isdigit():
 			my_list.append(i)
-	my_list.pop()
 	 
-	if len(my_list) == 5:
+	if len(my_list) == 6:
 		PID = my_list[3]
 		COREID = my_list[4]
 	else:
@@ -100,7 +97,7 @@ if __name__ == "__main__":
 	# Core Energy Model
 	I_leak_w=1.3136495
 	I_leak_n=0.45455
-	if  len(my_list) == 3:
+	if  len(my_list) == 4:
 		cores_w = cores_big+cores_mid1
 		cores_n = cores_mid2+cores_little
 	else:
