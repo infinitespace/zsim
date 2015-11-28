@@ -4,6 +4,8 @@ import sys
 import argparse
 import random
 import copy
+import heapq
+import pprint as pp
 
 def loadMap(mapdir):
     newmap = [[]]
@@ -24,21 +26,38 @@ def runPEH(tmapdir, pmapdir, cmapdir, outputfile):
     m = 4
     M = copy.deepcopy(tmap)
     X = np.zeros([pnum, n])
-    print tmap, pmap, cmap, n, m, M, X
+    # print tmap
+    pp.pprint(M)
+    # print X
 
-    m_to_one = range(1, m+1)
+    m_to_one = range(0, m)
     m_to_one.reverse()
     
     # Core types are ordered from smallest to biggest and assigned indices from 1 to m
     for j in m_to_one:
-        
-    print m_to_one
+        col = []
+        for i in range(len(M)):
+            print i, j, M[i][j]
+            col.append(M[i][j])
+        i_idx = getMaxK(col, n/m)
+        print i_idx
+
+def getMaxK(data, k):
+    res = []
+    for i in range(len(data)):
+        if len(res) < k:
+            heapq.heappush(res, [data[i], i])
+        else:
+            if res[0][0] < data[i]:
+                heapq.heappushpop(res, [data[i], i])
+    return res
 
 def getRandomMap(height, width):
     m = []
     for i in range(height):
         row = []
-        row.append(random.random() * 10)
+        for i in range(width):
+            row.append(random.random() * 10)
         m.append(row)
     return m
 
@@ -63,4 +82,5 @@ if __name__ == '__main__':
         pmapdir = args.c
     if args.o:
         outputfile = args.o
+
     runPEH(tmapdir, pmapdir, cmapdir, outputfile)
