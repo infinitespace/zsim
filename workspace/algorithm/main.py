@@ -49,8 +49,10 @@ if __name__ == '__main__':
     # T = loadMap(tmapdir)
     # P = loadMap(pmapdir)
     # cmap = loadMap(cmapdir)
-    T = getRandomMap(8, 4)
-    P = getRandomMap(8, 4)
-    cmap = [0,0,1,1,2,2,3,3]
-
+    #T = getRandomMap(8, 4)
+    #P = getRandomMap(8, 4)
+    #cmap = [0,0,1,1,2,2,3,3]
+    T = pickle.load(open("tmap_test.pkl", "r"))
+    P = pickle.load(open("pmap_test.pkl", "r"))
+    cmap = pickle.load(open("cmap_test.pkl", "r"))
     peh.runPEH(T, P, cmap, outputfile)
