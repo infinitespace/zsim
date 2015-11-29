@@ -15,8 +15,8 @@ def runPEH(T, P, cmap, outputfile):
     # Core types are ordered from biggest to smallest and assigned indices from 1 to m
     # Threads are mapped from biggest cores to smaller cores in descending order of 
     # throughput to achieve high throughput with best effort.
-    print 'M:\n',M
-    print 'X:\n',X
+    pp.pprint(M)
+    pp.pprint(X)
     for j in range(m): # from largest core to smallest core
         col = []
         for i in range(len(M)):

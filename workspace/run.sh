@@ -1,8 +1,7 @@
 #!/bin/bash
 cd run
 
-declare -a app=("blackscholes" "streamcluster" "ferret" "freqmine"
-"fluidanimate" "canneal")
+declare -a app=("blackscholes" "streamcluster" "ferret" "freqmine" "fluidanimate" "canneal")
 
 #for j in "${app[@]}"
 
@@ -20,7 +19,7 @@ do
 
   mv ../config/map_type_$j.dat ../config/map.dat
 
-  for i in 2 3 4 5
+  for i in 2 
   do
       echo "====================================================================="
       echo "i = "
