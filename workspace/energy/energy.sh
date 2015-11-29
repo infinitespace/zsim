@@ -52,7 +52,9 @@ l3=`cut -f30 -d " " args.txt`
 
 T=`cut -f31 -d " " args.txt`
 PID=`cut -f32 -d " " args.txt`
-COREID=`cut -f32 -d " " args.txt`
+COREID=`cut -f33 -d " " args.txt`
+
+IPC=`cut -f34 -d " " args.txt`
 
 ## Run CACTI 6.5 to get cache parameters
 L1_CACTI_big=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZE_1 -w $L1WAYS_1`
@@ -148,6 +150,7 @@ echo "------------------ Report --------------------"
 echo "Execution    time (s)  : $TIME"
 echo "Cores                  : $CORES"
 echo "Throughput (/s)        : $T"
+echo "IPC (instrs per cycle) : $IPC"
 echo "Total power (W)        : $TOTAL_POWER"
 echo "Total energy (J)       : $TOTAL_ENERGY"
 echo "Core dynamic power (W) : $CORE_DYN_POWER"
