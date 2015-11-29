@@ -5,20 +5,25 @@ import pprint
 import numpy as np
 import parse_cfg as ps
 import sys
+import re
 
 if __name__ == "__main__":
 	CFG_PATH = sys.argv[1]  
 	ZSIMH5_PATH = sys.argv[2] 
 
+        pos = ZSIMH5_PATH.find("zsim-ev")
+	substr = ZSIMH5_PATH[pos:]
 	my_list = []
-	for i in ZSIMH5_PATH:
+	for i in substr:
 		if i.isdigit():
 			my_list.append(i)
-	 
-	if len(my_list) == 6:
-		PID = my_list[3]
-		COREID = my_list[4]
+	my_list.pop()	
+	if my_list:
+		PID = my_list[0]
+		COREID = my_list[1]
+		flag = 1
 	else:
+		flag = 0
 		PID = "default"
 		COREID = "default"
 	cfg = ps.parse(CFG_PATH)
@@ -97,7 +102,7 @@ if __name__ == "__main__":
 	# Core Energy Model
 	I_leak_w=1.3136495
 	I_leak_n=0.45455
-	if  len(my_list) == 4:
+	if flag == 0:
 		cores_w = cores_big+cores_mid1
 		cores_n = cores_mid2+cores_little
 	else:
