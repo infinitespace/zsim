@@ -1,5 +1,5 @@
 # kinit wenbo6@stanford.edu && aklog
-CONF_DIR=/afs/.ir/users/w/e/wenbo6/cs316/zsim_build/downloads/zsim/workspace/config
+export CONF_DIR=/afs/.ir/users/w/e/wenbo6/cs316/zsim_build/downloads/zsim/workspace/config
 cd ~/cs316/zsim_build/
 export INST_DIR=$PWD
 cd ~/cs316/zsim_build/downloads/zsim/workspace
