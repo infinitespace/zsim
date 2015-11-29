@@ -1,4 +1,5 @@
 #!/bin/bash
+# sh ../../energy/energy.sh input/h5_11_29_2015/zsim-ev.h5 input/h5_11_29_2015/zsim.out het.cfg
 
 set -e
 
@@ -7,7 +8,7 @@ debug() { echo "D> $*" 1>&2; }
 WORK_PATH=~/cs316/zsim_build/downloads/zsim/workspace
 MAIN_PATH=$WORK_PATH/energy/src
 PY_PATH=$WORK_PATH/energy/parse_h5.py
-ZSIM_CFG_PATH=$WORK_PATH/config/$1
+ZSIM_CFG_PATH=$WORK_PATH/config/$3
 ZSIM_H5_PATH=$WORK_PATH/$1
 ZSIM_OUT_PATH=$WORK_PATH/$2
 
