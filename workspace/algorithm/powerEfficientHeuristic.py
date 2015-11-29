@@ -15,13 +15,14 @@ def runPEH(T, P, cmap, outputfile):
     # Core types are ordered from biggest to smallest and assigned indices from 1 to m
     # Threads are mapped from biggest cores to smaller cores in descending order of 
     # throughput to achieve high throughput with best effort.
-    pp.pprint(M)
-    pp.pprint(X)
+
+    coreinfo = getCoreInfo(cmap)
+    print 'Core info:', coreinfo
     for j in range(m): # from largest core to smallest core
         col = []
         for i in range(len(M)):
             col.append(M[i][j])
-        max_k_procs = getMaxK(col, n/m) # k = n/m
+        max_k_procs = getMaxK(col, coreinfo[j]) # k = n/m
         # print "=============", j
         # print col
         # print max_k_procs
@@ -34,7 +35,7 @@ def runPEH(T, P, cmap, outputfile):
     # swapsj := vectors of downward swaps for core type j
     swaps_all = getSwaps_all(m, X, T, P)
     
-    print 'X:\n',X
+    print 'X:\n', X
     print "init:", "Power:", getPower(X, P), " Throughput:", getThroughput(X, T)
 
     small_to_big = range(m-1)
@@ -51,13 +52,20 @@ def runPEH(T, P, cmap, outputfile):
                     X[proc_up][j] = 1
                     X[proc_up][j+1] = 0
                 swaps_all = getSwaps_all(m, X, T, P)
-        
         print 'X:\n',X
         print "after swap:", "Power:", getPower(X, P), " Throughput:", getThroughput(X, T)
+    return X
 
-'''
-return top k element [[idx, val],[idx, val]]
-'''
+
+
+def getCoreInfo(cmap):
+    typenum = max(cmap) + 1
+    coreinfo = np.zeros(typenum)
+    for t in cmap:
+        coreinfo[t] = coreinfo[t] + 1
+    return coreinfo
+
+# return top k element [[idx, val],[idx, val]]
 def getMaxK(data, k):
     res = []
     for i in range(len(data)):
