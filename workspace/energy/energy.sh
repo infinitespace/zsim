@@ -7,8 +7,9 @@ debug() { echo "D> $*" 1>&2; }
 WORK_PATH=~/cs316/zsim_build/downloads/zsim/workspace
 MAIN_PATH=$WORK_PATH/energy/src
 PY_PATH=$WORK_PATH/energy/parse_h5.py
-ZSIM_CFG_PATH=$WORK_PATH/config/$2
+ZSIM_CFG_PATH=$WORK_PATH/config/$1
 ZSIM_H5_PATH=$WORK_PATH/$1
+ZSIM_OUT_PATH=$WORK_PATH/$2
 
 python $PY_PATH $ZSIM_CFG_PATH $ZSIM_H5_PATH
 
@@ -125,8 +126,8 @@ L2_DYN_ENERGY=`echo "($l2_1*$L2_ENERGY_1+$l2_2*$L2_ENERGY_2)/1000000000" | bc -l
 L3_DYN_ENERGY=`echo "$l3*$L3_ENERGY/1000000000" | bc -l`
 L3_STA_ENERGY=`echo "$L3_POWER/1000*$TIME" | bc -l`
 
-MEM_RD=`grep -w rd zsim.out | awk '{print $2}' | paste -sd+ | bc`
-MEM_WR=`grep -w wr zsim.out | awk '{print $2}' | paste -sd+ | bc`
+MEM_RD=`grep -w rd $ZSIM_OUT_PATH | awk '{print $2}' | paste -sd+ | bc`
+MEM_WR=`grep -w wr $ZSIM_OUT_PATH | awk '{print $2}' | paste -sd+ | bc`
 
 #echo "python /afs/ir/class/ee282/pa2/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME"
 MEM_DYN_ENERGY=`python /afs/ir/class/ee282/pa1/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME false`
