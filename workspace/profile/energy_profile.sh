@@ -52,6 +52,8 @@ T=`cut -f31 -d " " args.txt`
 PID=`cut -f32 -d " " args.txt`
 COREID=`cut -f33 -d " " args.txt`
 
+IPC=`cut -f34 -d " " args.txt`
+
 ## Run CACTI 6.5 to get cache parameters
 L1_CACTI_big=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZE_1 -w $L1WAYS_1`
 L1_CACTI_mid1=`sh $MAIN_PATH/gen_cacti.sh -s $L1SIZE_2 -w $L1WAYS_2`
@@ -139,5 +141,5 @@ TOTAL_POWER=`echo $TOTAL_ENERGY/$TIME | bc -l`
 
 ENERGY_DELAY_PRODUCT=`echo $TIME*$TOTAL_ENERGY | bc -l`
 
-echo "$PID $COREID $T $TOTAL_POWER" >> profile.txt
+echo "$PID $COREID $T $TOTAL_POWER $IPC" >> profile.txt
 
