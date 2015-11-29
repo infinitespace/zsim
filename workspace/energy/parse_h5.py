@@ -19,8 +19,13 @@ if __name__ == "__main__":
 			my_list.append(i)
 	my_list.pop()	
 	if my_list:
-		PID = my_list[0]
-		COREID = my_list[1]
+		if len(my_list) == 3:
+			pid = str(my_list[0]) + str(my_list[1])
+			PID = int(pid)
+			COREID = my_list[2]
+		else:
+			PID = my_list[0]
+			COREID = my_list[1]
 		flag = 1
 	else:
 		flag = 0
@@ -99,7 +104,7 @@ if __name__ == "__main__":
 	instructions = instrs1 + instrs2 + instrs3 + instrs4
 	T = 1.0 / TIME
 
-	IPC = float(instructions / ccycles)
+	IPC = float(instructions / TIME)
 
 	# Core Energy Model
 	I_leak_w=1.3136495
