@@ -52,7 +52,7 @@ def runPEH(T, P, cmap, outputfile):
                     X[proc_up][j] = 1
                     X[proc_up][j+1] = 0
                 swaps_all = getSwaps_all(m, X, T, P)
-        print 'X:\n',X
+        # print 'X:\n',X
         print "after swap:", "Power:", getPower(X, P), " Throughput:", getThroughput(X, T)
     return X
 
