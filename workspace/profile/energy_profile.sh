@@ -8,7 +8,7 @@ WORK_PATH=~/cs316/zsim_build/downloads/zsim/workspace
 MAIN_PATH=$WORK_PATH/energy/src
 PY_PATH=$WORK_PATH/energy/parse_h5.py
 ZSIM_CFG_PATH=$WORK_PATH/config/$2
-ZSIM_H5_PATH=$WORK_PATH/run/$1
+ZSIM_H5_PATH=$WORK_PATH/input/h5_11_29_2015/$1
 
 python $PY_PATH $ZSIM_CFG_PATH $ZSIM_H5_PATH
 
