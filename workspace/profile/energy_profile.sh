@@ -125,8 +125,8 @@ L2_DYN_ENERGY=`echo "($l2_1*$L2_ENERGY_1+$l2_2*$L2_ENERGY_2)/1000000000" | bc -l
 L3_DYN_ENERGY=`echo "$l3*$L3_ENERGY/1000000000" | bc -l`
 L3_STA_ENERGY=`echo "$L3_POWER/1000*$TIME" | bc -l`
 
-MEM_RD=`grep -w rd zsim.out | awk '{print $2}' | paste -sd+ | bc`
-MEM_WR=`grep -w wr zsim.out | awk '{print $2}' | paste -sd+ | bc`
+MEM_RD=`grep -w rd zsim-$PID-$COREID.out | awk '{print $2}' | paste -sd+ | bc`
+MEM_WR=`grep -w wr zsim-$PID-$COREID.out | awk '{print $2}' | paste -sd+ | bc`
 
 #echo "python /afs/ir/class/ee282/pa2/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME"
 MEM_DYN_ENERGY=`python /afs/ir/class/ee282/pa1/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME false`
@@ -141,4 +141,3 @@ ENERGY_DELAY_PRODUCT=`echo $TIME*$TOTAL_ENERGY | bc -l`
 
 echo "$PID $COREID $T $TOTAL_POWER" >> profile.txt
 
-echo "$PID $COREID $ENERGY_DELAY_PRODUCT" >> profile_2.txt
