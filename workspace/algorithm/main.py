@@ -1,4 +1,3 @@
-import numpy as np
 import pickle
 import sys
 import argparse
@@ -7,6 +6,7 @@ import copy
 import heapq
 import pprint as pp
 import powerEfficientHeuristic as peh
+import numpy as np
 
 def writeMap(X, outputfile):
     output = open(outputfile, 'w')
@@ -96,8 +96,8 @@ if __name__ == '__main__':
     print T
     print 'input P:'
     print P
-    cmap = generateCmap(128, 4)
-    T16, P16 = enlargeMap(128, 5, 4, T, P)
+    cmap = generateCmap(16, 4)
+    T16, P16 = enlargeMap(16, 5, 4, T, P)
 
     if checkInput(T16, P16, cmap):
         X = peh.runPEH(T16, P16, cmap, outputfile)
