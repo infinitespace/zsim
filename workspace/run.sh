@@ -1,7 +1,7 @@
 #!/bin/bash
-cd run2
+cd run
 
-declare -a app=("blackscholes" "streamcluster" "freqmine" "fluidanimate" "canneal")
+declare -a app=("blackscholes" "streamcluster" "fluidanimate" "canneal")
 
 #for j in "${app[@]}"
 
@@ -19,7 +19,7 @@ do
 
   mv ../config/map_type_$j.dat ../config/map.dat
 
-  for i in 0 1 2 3 4
+  for i in 0 1 2 3
   do
       echo "====================================================================="
       echo "i = "
@@ -28,10 +28,10 @@ do
       echo $j
       echo "====================================================================="
 
-      ../../../../zsim ../config/${app[i]}.cfg    
+      ../../../../zsim ../config/${app[i]}.cfg 
   
-      mv zsim-ev.h5 zsim-ev-big-$i-$j.h5
-      mv zsim.out zsim-big-$i-$j.out
+      mv zsim-ev.h5 zsim-ev-$i-$j.h5
+      mv zsim.out zsim-$i-$j.out
   done
 
   mv ../config/map.dat ../config/map_type_$j.dat    
