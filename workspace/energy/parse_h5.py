@@ -112,21 +112,26 @@ if __name__ == "__main__":
 	if flag == 0:
 		cores_w = cores_big+cores_mid1
 		cores_n = cores_mid2+cores_little
+		CORE_STA_ENERGY_w= I_leak_w*CORE_VOLTAGE_w*TIME*cores_w
+		CORE_STA_ENERGY_n= I_leak_n*CORE_VOLTAGE_n*TIME*cores_n
 	else:
 		if COREID == 0 or COREID == 1:
 			cores_w = 1
 			cores_n = 0
+			CORE_STA_ENERGY_w = I_leak_w*CORE_VOLTAGE_w*TIME
+			CORE_STA_ENERGY_n = 0
 		else:
 			cores_w = 0
-			cores_n = 0 
+			cores_n = 1 
+			CORE_STA_ENERGY_n = I_leak_n*CORE_VOLTAGE_n*TIME
+			CORE_STA_ENERGY_w = 0
 
 	CORE_DYN_ENERGY_w= 2.22/1000000000*(instrs1+instrs2)*(CORE_VOLTAGE_w/1.35)*(CORE_VOLTAGE_w/1.35)
-	CORE_STA_ENERGY_w= I_leak_w*CORE_VOLTAGE_w*TIME*cores_w
 	CORE_DYN_ENERGY_n= .78/1000000000*(instrs3+instrs4)*(CORE_VOLTAGE_n/1.16)*(CORE_VOLTAGE_n/1.16)
-	CORE_STA_ENERGY_n= I_leak_n*CORE_VOLTAGE_n*TIME*cores_n
 
 	CORE_DYN_ENERGY=CORE_DYN_ENERGY_w+CORE_DYN_ENERGY_n
 	CORE_STA_ENERGY=CORE_STA_ENERGY_w+CORE_STA_ENERGY_n
+
 
 	f = open('args.txt', 'w')
 	line = str(TIME) + ' ' + str(frequency) + ' ' + str(cores_big) + ' ' + str(cores_mid1) + ' ' + str(cores_mid2) + ' ' + str(cores_little)

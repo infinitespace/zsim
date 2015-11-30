@@ -102,27 +102,8 @@ L3_AREA=`cut -f8 -d " " cacti_L3.txt`            # L3 area
 CORES=`echo $CORES_1+$CORES_2+$CORES_3+$CORES_4 | bc -l`
 
 # Beefy L1 cache energy
-if [ "$COREID" = "0" ]
-then
-    L1_STA_ENERGY=`echo "$L1_POWER_1/1000*$TIME" | bc -l`
-    L2_STA_ENERGY=`echo "$L2_POWER_1/1000*$TIME" | bc -l`
-elif [ "$COREID" = "1" ]   
-then 
-    L1_STA_ENERGY=`echo "$L1_POWER_2/1000*$TIME" | bc -l`
-    L2_STA_ENERGY=`echo "$L2_POWER_2/1000*$TIME" | bc -l`
-elif [ "$COREID" = "2" ]
-then
-    L1_STA_ENERGY=`echo "$L1_POWER_3/1000*$TIME" | bc -l`
-    L2_STA_ENERGY=`echo "0" | bc -l`
-elif [ "$COREID" = "3" ]
-then
-    L1_STA_ENERGY=`echo "$L1_POWER_4/1000*$TIME" | bc -l`
-    L2_STA_ENERGY=`echo "0" | bc -l`
-else    
-    L1_STA_ENERGY=`echo "($CORES_1*$L1_POWER_1+$CORES_2*$L1_POWER_2+$CORES_3*$L1_POWER_3+$CORES_4*$L1_POWER_4)/1000*$TIME" | bc -l`
-    L2_STA_ENERGY=`echo "($CORES_1*$L2_POWER_1+$CORES_2*$L2_POWER_2)/1000*$TIME" | bc -l`
-fi
-
+L1_STA_ENERGY=`echo "($CORES_1*$L1_POWER_1+$CORES_2*$L1_POWER_2+$CORES_3*$L1_POWER_3+$CORES_4*$L1_POWER_4)/1000*$TIME" | bc -l`
+L2_STA_ENERGY=`echo "($CORES_1*$L2_POWER_1+$CORES_2*$L2_POWER_2)/1000*$TIME" | bc -l`
 
 L1_DYN_ENERGY=`echo "($l1_1*$L1_ENERGY_1+$l1_2*$L1_ENERGY_2+$l1_3*$L1_ENERGY_3+$l1_4*$L1_ENERGY_4)/1000000000" | bc -l`
 L2_DYN_ENERGY=`echo "($l2_1*$L2_ENERGY_1+$l2_2*$L2_ENERGY_2)/1000000000" | bc -l`
@@ -149,8 +130,8 @@ echo "----------------------------------------------"
 echo "------------------ Report --------------------"
 echo "Execution    time (s)  : $TIME"
 echo "Cores                  : $CORES"
-echo "Throughput (/s)        : $T"
-echo "IPC (instrs per cycle) : $IPC"
+echo "Performance (/s)       : $T"
+echo "IPC (instrs per second): $IPC"
 echo "Total power (W)        : $TOTAL_POWER"
 echo "Total energy (J)       : $TOTAL_ENERGY"
 echo "Core dynamic power (W) : $CORE_DYN_POWER"
