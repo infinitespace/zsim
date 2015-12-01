@@ -1,3 +1,13 @@
+'''
+To install pulp:
+
+In windows (please make sure pip is on your path):
+c:\Python26\Scripts\> pip install pulp
+
+In Linux:
+$ sudo pip install pulp
+$ sudo pulptest             #needed to get the default solver to work
+'''
 import pickle
 import sys
 import argparse
