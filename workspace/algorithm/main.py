@@ -70,7 +70,7 @@ if __name__ == '__main__':
     parser.add_argument('-o', help = 'output map dir', required = False)
     args = parser.parse_args()
 
-    tmapdir = 'tmap.pkl'
+    tmapdir = 'tmap_ipc.pkl'
     pmapdir = 'pmap.pkl'
     cmapdir = 'cmap.pkl'
     outputfile = 'map.dat'
@@ -97,10 +97,11 @@ if __name__ == '__main__':
     print T
     print 'input P:'
     print P
-    cmap = generateCmap(16, 4)
-    T16, P16 = enlargeMap(16, 4, 4, T, P)
+    cmap = generateCmap(32, 4)
+    T16, P16 = enlargeMap(32, 4, 4, T, P)
 
     if checkInput(T16, P16, cmap):
-        # X = peh.runPEH(T16, P16, cmap, outputfile)
-        X = pehmp.runPEH_for_minPower(T16, P16, cmap, outputfile)
+        X = ilp.ilpSolver(T16, P16, cmap) # optimal solution, ilp solver
+        # X = peh.runPEH(T16, P16, cmap, outputfile) # original heuristic
+        X = pehmp.runPEH_for_minPower(T16, P16, cmap, outputfile) # our heuristic
         writeMap(X, 256, outputfile)
