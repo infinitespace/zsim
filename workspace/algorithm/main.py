@@ -8,12 +8,12 @@ import pprint as pp
 import powerEfficientHeuristic as peh
 import numpy as np
 
-def writeMap(X, outputfile):
+def writeMap(X, corenum, outputfile):
     output = open(outputfile, 'w')
     for row in X:
         for i in range(len(row)):
             if row[i] == 1:
-                output.write(str(i) + ',1\n')
+                output.write(str(i) + ','+str(corenum)+'\n')
     output.close()
 
 def getRandomMap(height, width):
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     if args.p:
         pmapdir = args.p
     if args.c:
-        pmapdir = args.c
+        cmapdir = args.c
     if args.o:
         outputfile = args.o
 
@@ -97,8 +97,8 @@ if __name__ == '__main__':
     print 'input P:'
     print P
     cmap = generateCmap(16, 4)
-    T16, P16 = enlargeMap(16, 5, 4, T, P)
+    T16, P16 = enlargeMap(16, 4, 4, T, P)
 
     if checkInput(T16, P16, cmap):
         X = peh.runPEH(T16, P16, cmap, outputfile)
-        writeMap(X, outputfile)
+        writeMap(X, 256, outputfile)

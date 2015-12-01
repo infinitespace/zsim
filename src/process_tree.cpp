@@ -240,6 +240,7 @@ static void PopulateLevel(Config& config, const std::string& prefix, std::vector
                     int offset = rand()%ONE_TYPE_CORE_NUM;
                     if(used_cores.find(offset) == used_cores.end()){
                         mask[ONE_TYPE_CORE_NUM * coreType + offset] = true;
+                        used_cores.insert(offset);
                         used_num++;
                     }
                 }
