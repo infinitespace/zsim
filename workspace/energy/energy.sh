@@ -102,13 +102,24 @@ L3_AREA=`cut -f8 -d " " cacti_L3.txt`            # L3 area
 CORES=`echo $CORES_1+$CORES_2+$CORES_3+$CORES_4 | bc -l`
 
 # Beefy L1 cache energy
-L1_STA_ENERGY=`echo "($CORES_1*$L1_POWER_1+$CORES_2*$L1_POWER_2+$CORES_3*$L1_POWER_3+$CORES_4*$L1_POWER_4)/1000*$TIME" | bc -l`
-L2_STA_ENERGY=`echo "($CORES_1*$L2_POWER_1+$CORES_2*$L2_POWER_2)/1000*$TIME" | bc -l`
+L1_STA_POWER=`echo "($CORES_1*$L1_POWER_1+$CORES_2*$L1_POWER_2+$CORES_3*$L1_POWER_3+$CORES_4*$L1_POWER_4)/1000" | bc -l`
+L1_STA_ENERGY=`echo "$L1_STA_POWER*$TIME" | bc -l`
+
+L2_STA_POWER=`echo "($CORES_1*$L2_POWER_1+$CORES_2*$L2_POWER_2)/1000" | bc -l`
+L2_STA_ENERGY=`echo "$L2_STA_POWER*$TIME" | bc -l`
 
 L1_DYN_ENERGY=`echo "($l1_1*$L1_ENERGY_1+$l1_2*$L1_ENERGY_2+$l1_3*$L1_ENERGY_3+$l1_4*$L1_ENERGY_4)/1000000000" | bc -l`
+L1_DYN_POWER=`echo "$L1_DYN_ENERGY/$TIME" | bc -l`
+
 L2_DYN_ENERGY=`echo "($l2_1*$L2_ENERGY_1+$l2_2*$L2_ENERGY_2)/1000000000" | bc -l`
+L2_DYN_POWER=`echo "$L2_DYN_ENERGY/$TIME" | bc -l`
+
 L3_DYN_ENERGY=`echo "$l3*$L3_ENERGY/1000000000" | bc -l`
+L3_DYN_POWER=`echo "$L3_DYN_ENERGY/$TIME" | bc -l`
+
+L3_STA_POWER=`echo "$L3_POWER/1000" | bc -l`
 L3_STA_ENERGY=`echo "$L3_POWER/1000*$TIME" | bc -l`
+
 
 MEM_RD=`grep -w rd $ZSIM_OUT_PATH | awk '{print $2}' | paste -sd+ | bc`
 MEM_WR=`grep -w wr $ZSIM_OUT_PATH | awk '{print $2}' | paste -sd+ | bc`
@@ -116,6 +127,9 @@ MEM_WR=`grep -w wr $ZSIM_OUT_PATH | awk '{print $2}' | paste -sd+ | bc`
 #echo "python /afs/ir/class/ee282/pa2/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME"
 MEM_DYN_ENERGY=`python /afs/ir/class/ee282/pa1/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME false`
 MEM_STA_ENERGY=`python /afs/ir/class/ee282/pa1/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME true`
+
+MEM_DYN_POWER=`echo "$MEM_DYN_ENERGY/$TIME" | bc -l`
+MEM_STA_POWER=`echo "$MEM_STA_ENERGY/$TIME" | bc -l`
 
 TOTAL_ENERGY=`echo $CORE_DYN_ENERGY+$CORE_STA_ENERGY+$L1_DYN_ENERGY+$L1_STA_ENERGY+$L2_DYN_ENERGY+$L2_STA_ENERGY+$L3_DYN_ENERGY+$L3_STA_ENERGY+$MEM_DYN_ENERGY+$MEM_STA_ENERGY | bc -l`
 EDP=`echo $TOTAL_ENERGY*$TIME | bc -l`
@@ -125,6 +139,8 @@ TOTAL_POWER=`echo $TOTAL_ENERGY/$TIME | bc -l`
 CORE_DYN_POWER=`echo $CORE_DYN_ENERGY/$TIME | bc -l`
 CORE_STA_POWER=`echo $CORE_STA_ENERGY/$TIME | bc -l`
 
+TOTAL_DYN_POWER=`echo $CORE_DYN_POWER+$L1_DYN_POWER+$L2_DYN_POWER+$L3_DYN_POWER+$MEM_DYN_POWER | bc -l`
+TOTAL_STA_POWER=`echo $CORE_STA_POWER+$L1_STA_POWER+$L2_STA_POWER+$L3_STA_POWER+$MEM_STA_POWER | bc -l`
 
 echo "----------------------------------------------"
 echo "------------------ Report --------------------"
@@ -148,6 +164,10 @@ echo "L3 static energy (J)   : $L3_STA_ENERGY"
 echo "Mem dynamic energy (J) : $MEM_DYN_ENERGY"
 echo "Mem static energy (J)  : $MEM_STA_ENERGY"
 
+echo "                                               "
+echo "-------------- Power Report -------------------"
+echo "Total dynamic power (W)      : $TOTAL_DYN_POWER"
+echo "Total static power (W)       : $TOTAL_STA_POWER"
 echo "                                               "
 echo "-----------------------------------------------"
 echo "---------Process: Instructions per sec---------"
