@@ -5,7 +5,7 @@ import pprint
 import numpy as np
 import parse_cfg as ps
 import sys
-import re
+import pickle
 
 if __name__ == "__main__":
 	CFG_PATH = sys.argv[1]  
@@ -79,6 +79,24 @@ if __name__ == "__main__":
 	ccycles = endPhase * phaseLength
 	TIME = float(ccycles / frequency) * 0.000001
 
+	process_time = []
+	process_ins_per_sec = []
+	i = 0
+	while 1:
+		cycles = dset[-1]['procCycles'][i]
+		instrs = dset[-1]['procInstrs'][i]
+		if cycles == 0:
+			break
+		time = float(cycles) * 0.000001 / frequency
+		ins_per_sec = float(instrs) / time
+		process_time.append(time)
+		process_ins_per_sec.append(ins_per_sec)
+		i += 1
+	
+	pickle.dump(process_time, open("process_time.pkl", "wb"))	
+
+	pickle.dump(process_ins_per_sec, open("process_ins_per_sec.pkl", "wb"))	
+
 	# Cache hits and misses
 	l1_1 = np.sum(dset[-1]['l1i_big']['hGETS']+dset[-1]['l1d_big']['hGETS']+dset[-1]['l1i_big']['hGETX']+dset[-1]['l1d_big']['hGETX']+dset[-1]['l1i_big']['mGETS']+dset[-1]['l1d_big']['mGETS'])
 	l1_2 = np.sum(dset[-1]['l1i_mid1']['hGETS'])+np.sum(dset[-1]['l1d_mid1']['hGETS'])+np.sum(dset[-1]['l1i_mid1']['hGETX'])+np.sum(dset[-1]['l1d_mid1']['hGETX'])+np.sum(dset[-1]['l1i_mid1']['mGETS'])+np.sum(dset[-1]['l1d_mid1']['mGETS'])
@@ -142,3 +160,14 @@ if __name__ == "__main__":
 	line += str(l1_4) + ' ' + str(l2_1) + ' ' + str(l2_2) + ' ' + str(l3) + ' ' + str(T) + ' ' + str(PID) + ' ' +str(COREID)+' '+str(IPC)
 
 	f.write(line)
+
+	fp = open('processinfo.txt', 'w')
+	#string = ' '.join(process_ins_per_sec)
+	for i in process_ins_per_sec:
+		fp.write(str(i) + "\n")
+
+	f.close()
+	fp.close()       
+
+
+

@@ -148,5 +148,10 @@ echo "L3 static energy (J)   : $L3_STA_ENERGY"
 echo "Mem dynamic energy (J) : $MEM_DYN_ENERGY"
 echo "Mem static energy (J)  : $MEM_STA_ENERGY"
 
-
-
+echo "                                               "
+echo "-----------------------------------------------"
+echo "---------Process: Instructions per sec---------"
+echo "-----------------------------------------------"
+while read p; do
+  echo $p
+done <processinfo.txt
