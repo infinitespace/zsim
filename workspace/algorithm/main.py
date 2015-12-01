@@ -6,6 +6,7 @@ import copy
 import heapq
 import pprint as pp
 import powerEfficientHeuristic as peh
+import powerEfficientHeuristic_minP as pehmp 
 import numpy as np
 
 def writeMap(X, corenum, outputfile):
@@ -100,5 +101,6 @@ if __name__ == '__main__':
     T16, P16 = enlargeMap(16, 4, 4, T, P)
 
     if checkInput(T16, P16, cmap):
-        X = peh.runPEH(T16, P16, cmap, outputfile)
+        # X = peh.runPEH(T16, P16, cmap, outputfile)
+        X = pehmp.runPEH_for_minPower(T16, P16, cmap, outputfile)
         writeMap(X, 256, outputfile)
