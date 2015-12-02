@@ -56,8 +56,6 @@ def runPEH(T, P, cmap, outputfile):
         print "after swap:", "Power:", getPower(X, P), " Throughput:", getThroughput(X, T)
     return X
 
-
-
 def getCoreInfo(cmap):
     typenum = max(cmap) + 1
     coreinfo = np.zeros(typenum)
