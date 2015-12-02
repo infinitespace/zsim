@@ -37,9 +37,10 @@ def runPEH_for_minPower(T, P, cmap, outputfile):
     # swapsj := vectors of downward swaps for core type j
     swaps_all = getSwaps_all(m, X, T, P)
     
+        
     print 'X:\n', X
     print "init:", "Power:", getPower(X, P), " Throughput:", getThroughput(X, T)
-
+    '''
     big_to_small = range(1, m)
     while check_avail(swaps_all) > 0:
         for j in big_to_small:
@@ -57,6 +58,7 @@ def runPEH_for_minPower(T, P, cmap, outputfile):
                 swaps_all = getSwaps_all(m, X, T, P)
                 # print 'X:\n',X
                 print "after swap:", "Power:", getPower(X, P), " Throughput:", getThroughput(X, T)
+    '''
     return X
 
 
