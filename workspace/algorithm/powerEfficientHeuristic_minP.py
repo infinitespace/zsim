@@ -5,13 +5,14 @@ import copy
 import heapq
 import pprint as pp
 
-def runPEH_for_minPower(T, P, cmap, outputfile):
+def runPEH_for_minPower(T, P, cmap, outputfile, Degradation):
     pnum = len(T) # process number
     n = len(cmap)    # total core number
     m = 4
     M = copy.deepcopy(P)
     X = np.zeros([pnum, m])
-    
+    Threshold = getBaselineThroughput(T) * Degradation
+    print 'Threshold:', Threshold
     # Core types are ordered from biggest to smallest and assigned indices from 1 to m
     # Threads are mapped from biggest cores to smaller cores in descending order of 
     # throughput to achieve high throughput with best effort.
@@ -42,6 +43,7 @@ def runPEH_for_minPower(T, P, cmap, outputfile):
     print "init:", "Power:", getPower(X, P), " Throughput:", getThroughput(X, T)
   
     big_to_small = range(1, m)
+    finish = False
     while check_avail(swaps_all) > 0:
         for j in big_to_small:
             # print j, swaps_all[j]
@@ -58,9 +60,18 @@ def runPEH_for_minPower(T, P, cmap, outputfile):
                 swaps_all = getSwaps_all(m, X, T, P)
                 # print 'X:\n',X
                 print "after swap:", "Power:", getPower(X, P), " Throughput:", getThroughput(X, T)
-    
+            if getThroughput(X, T) > Threshold:
+                finish = True
+                break
+        if finish:
+            break
     return X
 
+def getBaselineThroughput(T):
+    avg = 0
+    for row in T:
+        avg += float(sum(row))/len(row)
+    return avg
 
 def getSwaps_all(m, X, T, P):
     swaps_all = [[]]*m

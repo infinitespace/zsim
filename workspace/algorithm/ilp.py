@@ -20,13 +20,15 @@ import powerEfficientHeuristic_minP as pehmp
 import numpy as np
 from pulp import *
 
-def ilpSolver(T, P ,C):
+def ilpSolver(T, P ,C, Degradation):
     # Create the 'prob' variable to contain the problem data
     prob = LpProblem("Min_power",LpMinimize)
 
     procnum = len(T)
     coretype = len(T[0])
     corenum = len(C)
+
+    Threshold = pehmp.getBaselineThroughput(T) * Degradation
     # The procnum variables are created with a lower limit of zero, hiher limit of coretype - 1
     x = [LpVariable("Proc " + str(i) + " Core " + str(j), 0, 1, LpInteger) for i in range(procnum) for j in range(coretype)]
     # The objective function is added to 'prob' first
@@ -35,6 +37,7 @@ def ilpSolver(T, P ,C):
     prob += lpSum([P[i][j]*x[i*coretype + j] for i in range(procnum) for j in range(coretype)]), "Total Power"
 
     # The five constraints are entered
+    prob += lpSum([T[i][j]*x[i*coretype + j] for i in range(procnum) for j in range(coretype)]) > Threshold, 'throughput Threshold'
     prob += lpSum([x[i] for i in [j*4 for j in range(procnum)]]) == corenum/coretype, "max proc on one type of core 0"
     prob += lpSum([x[i] for i in [j*4 + 1 for j in range(procnum)]]) == corenum/coretype, "max proc on one type of core 1"
     prob += lpSum([x[i] for i in [j*4 + 2 for j in range(procnum)]]) == corenum/coretype, "max proc on one type of core 2"
@@ -61,6 +64,6 @@ def ilpSolver(T, P ,C):
 
     # The optimised objective function value is printed to the screen
     print("Total Power = ", value(prob.objective))
-
+    print " Throughput:", pehmp.getThroughput(X, T)
     return X
 

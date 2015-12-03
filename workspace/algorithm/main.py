@@ -69,12 +69,15 @@ if __name__ == '__main__':
     parser.add_argument('-p', help = 'power map dir', required = False)
     parser.add_argument('-c', help = 'core map dir', required = False)
     parser.add_argument('-o', help = 'output map dir', required = False)
+    parser.add_argument('-d', help = 'degradation from 0 to 1', required = False)
     args = parser.parse_args()
 
     tmapdir = 'tmap_ipc.pkl'
     pmapdir = 'pmap.pkl'
     cmapdir = 'cmap.pkl'
     outputfile = 'map.dat'
+    degredation = 1
+
     if args.t:
         tmapdir = args.t
     if args.p:
@@ -83,6 +86,8 @@ if __name__ == '__main__':
         cmapdir = args.c
     if args.o:
         outputfile = args.o
+    if args.d:
+        degredation = float(args.d)
 
     T = loadMap(tmapdir)
     P = loadMap(pmapdir)
@@ -102,8 +107,8 @@ if __name__ == '__main__':
     # T16, P16 = enlargeMap(32, 4, 4, T, P)
 
     if checkInput(T, P, cmap):
-        # X = ilp.ilpSolver(T, P, cmap) # optimal solution, ilp solver
+        # X = ilp.ilpSolver(T, P, cmap, degredation) # optimal solution, ilp solver
         # X = peh.runPEH(T16, P16, cmap, outputfile) # original heuristic
-        X = pehmp.runPEH_for_minPower(T, P, cmap, outputfile) # our heuristic
+        X = pehmp.runPEH_for_minPower(T, P, cmap, outputfile, degredation) # our heuristic
         print "Power:", peh.getPower(X, P)
         writeMap(X, 256, outputfile)
