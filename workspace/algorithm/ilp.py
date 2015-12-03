@@ -38,7 +38,7 @@ def ilpSolver(T, P ,C):
     prob += lpSum([x[i] for i in [j*4 for j in range(procnum)]]) == corenum/coretype, "max proc on one type of core 0"
     prob += lpSum([x[i] for i in [j*4 + 1 for j in range(procnum)]]) == corenum/coretype, "max proc on one type of core 1"
     prob += lpSum([x[i] for i in [j*4 + 2 for j in range(procnum)]]) == corenum/coretype, "max proc on one type of core 2"
-    prob += lpSum([x[i] for i in [j*4 + 3 for j in range(procnum)]]) == corenum/coretypee, "max proc on one type of core 3"
+    prob += lpSum([x[i] for i in [j*4 + 3 for j in range(procnum)]]) == corenum/coretype, "max proc on one type of core 3"
     for i in range(procnum):
         prob += lpSum([x[j] for j in range(i * coretype, i * coretype + coretype)]) == 1, "max core on one type of proc" + str(i)
 

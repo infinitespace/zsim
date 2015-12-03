@@ -1,3 +1,4 @@
+import ilp
 import pickle
 import sys
 import argparse
@@ -98,10 +99,11 @@ if __name__ == '__main__':
     print 'input P:'
     print P
     cmap = generateCmap(32, 4)
-    T16, P16 = enlargeMap(32, 4, 4, T, P)
+    # T16, P16 = enlargeMap(32, 4, 4, T, P)
 
-    if checkInput(T16, P16, cmap):
+    if checkInput(T, P, cmap):
         # X = ilp.ilpSolver(T16, P16, cmap) # optimal solution, ilp solver
         # X = peh.runPEH(T16, P16, cmap, outputfile) # original heuristic
-        X = pehmp.runPEH_for_minPower(T16, P16, cmap, outputfile) # our heuristic
+        X = pehmp.runPEH_for_minPower(T, P, cmap, outputfile) # our heuristic
+        print "Power:", peh.getPower(X, P)
         writeMap(X, 256, outputfile)
