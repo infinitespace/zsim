@@ -28,7 +28,7 @@ def ilpSolver(T, P ,C):
     coretype = len(T[0])
     corenum = len(C)
     # The procnum variables are created with a lower limit of zero, hiher limit of coretype - 1
-    x = [LpVariable("Proc" + str(i) + "Core" + str(j), 0, 1, LpInteger) for i in range(procnum) for j in range(coretype)]
+    x = [LpVariable("Proc " + str(i) + " Core " + str(j), 0, 1, LpInteger) for i in range(procnum) for j in range(coretype)]
     # The objective function is added to 'prob' first
     # print x
 
@@ -52,16 +52,12 @@ def ilpSolver(T, P ,C):
     print("Status:", LpStatus[prob.status])
 
     # Each of the variables is printed with it's resolved optimum value
-    X = []
+    X = np.zeros([procnum, coretype])
     row = []
-    idx = 0
     for v in prob.variables():
         print(v.name, "=", v.varValue)
-        row.append(v.varValue)
-        if idx % coretype == coretype - 1:
-            X.append(copy.deepcopy(row))
-            row = []
-        idx += 1
+        idx = [ int(s) for s in v.name.split('_') if s.isdigit()]
+        X[idx[0]][idx[1]] = v.varValue
 
     # The optimised objective function value is printed to the screen
     print("Total Power = ", value(prob.objective))

@@ -102,8 +102,8 @@ if __name__ == '__main__':
     # T16, P16 = enlargeMap(32, 4, 4, T, P)
 
     if checkInput(T, P, cmap):
-        # X = ilp.ilpSolver(T16, P16, cmap) # optimal solution, ilp solver
+        X = ilp.ilpSolver(T, P, cmap) # optimal solution, ilp solver
         # X = peh.runPEH(T16, P16, cmap, outputfile) # original heuristic
-        X = pehmp.runPEH_for_minPower(T, P, cmap, outputfile) # our heuristic
+        # X = pehmp.runPEH_for_minPower(T, P, cmap, outputfile) # our heuristic
         print "Power:", peh.getPower(X, P)
         writeMap(X, 256, outputfile)
