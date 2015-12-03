@@ -125,15 +125,17 @@ MEM_RD=`grep -w rd $ZSIM_OUT_PATH | awk '{print $2}' | paste -sd+ | bc`
 MEM_WR=`grep -w wr $ZSIM_OUT_PATH | awk '{print $2}' | paste -sd+ | bc`
 
 #echo "python /afs/ir/class/ee282/pa2/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME"
-MEM_DYN_ENERGY=`python /afs/ir/class/ee282/pa1/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME false`
-MEM_STA_ENERGY=`python /afs/ir/class/ee282/pa1/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME true`
+#MEM_DYN_ENERGY=`python /afs/ir/class/ee282/pa1/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME false`
+#MEM_STA_ENERGY=`python /afs/ir/class/ee282/pa1/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME true`
+
+MEM_DYN_ENERGY=`echo "200*($MEM_RD+$MEM_WR)/1000000000" | bc -l`
+MEM_STA_ENERGY=`echo "50.63/1000*$TIME" | bc -l`
 
 MEM_DYN_POWER=`echo "$MEM_DYN_ENERGY/$TIME" | bc -l`
-MEM_STA_POWER=`echo "$MEM_STA_ENERGY/$TIME" | bc -l`
+MEM_STA_POWER=`echo "50.63/1000" | bc -l`
+
 
 TOTAL_ENERGY=`echo $CORE_DYN_ENERGY+$CORE_STA_ENERGY+$L1_DYN_ENERGY+$L1_STA_ENERGY+$L2_DYN_ENERGY+$L2_STA_ENERGY+$L3_DYN_ENERGY+$L3_STA_ENERGY+$MEM_DYN_ENERGY+$MEM_STA_ENERGY | bc -l`
-EDP=`echo $TOTAL_ENERGY*$TIME | bc -l`
-
 TOTAL_POWER=`echo $TOTAL_ENERGY/$TIME | bc -l`
 
 CORE_DYN_POWER=`echo $CORE_DYN_ENERGY/$TIME | bc -l`
@@ -163,6 +165,7 @@ echo "L3 dynamic energy (J)  : $L3_DYN_ENERGY"
 echo "L3 static energy (J)   : $L3_STA_ENERGY"
 echo "Mem dynamic energy (J) : $MEM_DYN_ENERGY"
 echo "Mem static energy (J)  : $MEM_STA_ENERGY"
+
 
 echo "                                               "
 echo "-------------- Power Report -------------------"
