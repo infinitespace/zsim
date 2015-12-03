@@ -41,9 +41,10 @@ def runPEH_for_minPower(T, P, cmap, outputfile, Degradation):
         
     print 'X:\n', X
     print "init:", "Power:", getPower(X, P), " Throughput:", getThroughput(X, T)
-  
+
     big_to_small = range(1, m)
     finish = False
+    swap_num = 0
     while check_avail(swaps_all) > 0:
         for j in big_to_small:
             # print j, swaps_all[j]
@@ -57,6 +58,7 @@ def runPEH_for_minPower(T, P, cmap, outputfile, Degradation):
                     X[proc_down][j-1] = 0
                     X[proc_up][j] = 0
                     X[proc_up][j-1] = 1
+                    swap_num += 1
                 swaps_all = getSwaps_all(m, X, T, P)
                 # print 'X:\n',X
                 print "after swap:", "Power:", getPower(X, P), " Throughput:", getThroughput(X, T)
@@ -65,6 +67,7 @@ def runPEH_for_minPower(T, P, cmap, outputfile, Degradation):
                 break
         if finish:
             break
+    print "Swap Num:", swap_num
     return X
 
 def getBaselineThroughput(T):

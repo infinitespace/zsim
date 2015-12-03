@@ -104,11 +104,11 @@ if __name__ == '__main__':
     print 'input P:'
     print P
     cmap = generateCmap(32, 4)
-    # T16, P16 = enlargeMap(32, 4, 4, T, P)
+    # T, P = enlargeMap(128, 4, 4, T, P)
 
     if checkInput(T, P, cmap):
         # X = ilp.ilpSolver(T, P, cmap, degredation) # optimal solution, ilp solver
         # X = peh.runPEH(T16, P16, cmap, outputfile) # original heuristic
         X = pehmp.runPEH_for_minPower(T, P, cmap, outputfile, degredation) # our heuristic
         print "Power:", peh.getPower(X, P)
-        writeMap(X, 256, outputfile)
+        writeMap(X, 32, outputfile)
