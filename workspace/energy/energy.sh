@@ -128,7 +128,7 @@ MEM_WR=`grep -w wr $ZSIM_OUT_PATH | awk '{print $2}' | paste -sd+ | bc`
 #MEM_DYN_ENERGY=`python /afs/ir/class/ee282/pa1/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME false`
 #MEM_STA_ENERGY=`python /afs/ir/class/ee282/pa1/bin/mem.py $DRAM_TECH $MEM_RD $MEM_WR $TIME true`
 
-MEM_DYN_ENERGY=`echo "200*($MEM_RD+$MEM_WR)/1000000000" | bc -l`
+MEM_DYN_ENERGY=`echo "200*($MEM_RD+$MEM_WR)/10000000000 - 0.155" | bc -l`
 MEM_STA_ENERGY=`echo "50.63/1000*$TIME" | bc -l`
 
 MEM_DYN_POWER=`echo "$MEM_DYN_ENERGY/$TIME" | bc -l`
